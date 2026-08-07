@@ -1,493 +1,300 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>每日股市消息汇总 - 2026年8月7日</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            min-height: 100vh;
-            padding: 20px;
-            color: #e0e0e0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.03);
-            border-radius: 20px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(255,215,0,0.3);
-        }
-        .header h1 {
-            font-size: 28px;
-            background: linear-gradient(90deg, #ffd700, #ffaa00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-        .header .update-time {
-            font-size: 14px;
-            color: #aaa;
-            background: rgba(255,255,255,0.05);
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 20px;
-        }
-        .section {
-            margin-bottom: 28px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            padding-left: 12px;
-            border-left: 4px solid #ffd700;
-            color: #fff;
-        }
-        .market-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
-        }
-        .market-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .market-card .name { font-size: 14px; color: #ccc; }
-        .market-card .value { font-size: 13px; color: #999; margin-top: 2px; }
-        .market-card .change { font-size: 16px; font-weight: 700; }
-        .up { color: #ff4d4d; }
-        .down { color: #00c853; }
-        .neutral { color: #ffd700; }
-        
-        .sector-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .sector-table th {
-            background: rgba(255,215,0,0.15);
-            padding: 10px 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #ffd700;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .sector-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            vertical-align: top;
-            line-height: 1.6;
-        }
-        .sector-table tr:hover { background: rgba(255,255,255,0.03); }
-        
-        .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            margin-right: 4px;
-            margin-bottom: 4px;
-        }
-        .tag-bull { background: rgba(255,77,77,0.2); color: #ff6b6b; }
-        .tag-bear { background: rgba(0,200,83,0.2); color: #69f0ae; }
-        
-        .predict-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .predict-item:last-child { border-bottom: none; }
-        .predict-item .sector-name {
-            font-weight: 600;
-            color: #ffd700;
-            margin-bottom: 6px;
-        }
-        .predict-item .detail { font-size: 13px; line-height: 1.7; color: #ccc; }
-        
-        .focus-card {
-            background: rgba(255,215,0,0.05);
-            border: 1px solid rgba(255,215,0,0.2);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .focus-card .title {
-            font-weight: 600;
-            color: #ffd700;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .focus-card .desc { font-size: 13px; color: #bbb; line-height: 1.6; }
-        .focus-card .source { font-size: 11px; color: #888; margin-top: 6px; }
-        
-        .fund-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .fund-table th {
-            background: rgba(100,181,246,0.15);
-            padding: 10px 12px;
-            text-align: left;
-            color: #90caf9;
-            font-weight: 600;
-        }
-        .fund-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .fund-table tr:hover { background: rgba(255,255,255,0.03); }
-        
-        .disclaimer {
-            margin-top: 24px;
-            padding: 16px;
-            background: rgba(255,77,77,0.08);
-            border-radius: 10px;
-            font-size: 12px;
-            color: #999;
-            text-align: center;
-            line-height: 1.8;
-        }
-        .highlight { color: #ffd700; font-weight: 600; }
-        .section-num {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 24px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #000;
-            margin-right: 8px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日股市消息汇总 2026-08-07</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#0d1117;color:#e6edf3;padding:16px;line-height:1.6}
+.wrap{max-width:920px;margin:0 auto}
+.header{text-align:center;padding:28px 0 20px;border-bottom:2px solid #f0b429}
+.header h1{font-size:26px;color:#f0b429;letter-spacing:2px}
+.header .sub{font-size:13px;color:#8b949e;margin-top:8px}
+.header .time-badge{display:inline-block;margin-top:10px;padding:5px 18px;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.3);border-radius:20px;font-size:13px;color:#f0b429}
+.section{margin-top:24px;background:#161b22;border:1px solid #30363d;border-radius:12px;padding:22px;page-break-inside:avoid}
+.sec-title{font-size:17px;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sec-title .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:linear-gradient(135deg,#f0b429,#e8590c);border-radius:50%;font-size:13px;font-weight:700;color:#000;flex-shrink:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.card{background:#1c2128;border:1px solid #30363d;border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.card .left .name{font-size:12px;color:#8b949e}
+.card .left .val{font-size:15px;font-weight:600;color:#e6edf3;margin-top:2px}
+.card .chg{font-size:15px;font-weight:700}
+.up{color:#f85149}.down{color:#3fb950}.flat{color:#f0b429}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th{background:#1c2128;padding:10px;text-align:left;color:#f0b429;font-weight:600;border-bottom:1px solid #30363d}
+td{padding:10px;border-bottom:1px solid #21262d;vertical-align:top;line-height:1.7}
+tr:hover{background:#1c2128}
+.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;margin:1px 3px 1px 0}
+.tag-b{background:rgba(248,81,73,.15);color:#f85149}
+.tag-s{background:rgba(63,185,80,.15);color:#3fb950}
+.predict{padding:12px 0;border-bottom:1px solid #21262d}
+.predict:last-child{border-bottom:none}
+.predict .p-name{font-weight:700;color:#f0b429;font-size:14px;margin-bottom:4px}
+.predict .p-body{font-size:13px;color:#c9d1d9}
+.focus{background:#1c2128;border-left:3px solid #f0b429;border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.focus .f-title{font-weight:700;color:#f0b429;font-size:14px;margin-bottom:6px}
+.focus .f-desc{font-size:13px;color:#c9d1d9}
+.focus .f-src{font-size:11px;color:#8b949e;margin-top:6px}
+.fund-tbl td:first-child{font-weight:600;color:#58a6ff}
+.note{margin-top:16px;padding:14px;background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.2);border-radius:8px;font-size:12px;color:#8b949e;text-align:center;line-height:1.8}
+.hl{color:#f0b429;font-weight:600}
+.summary-box{background:rgba(240,180,41,.06);border:1px solid rgba(240,180,41,.2);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.8;color:#c9d1d9}
+.alert-box{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.25);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.8}
+@media print{body{background:#fff;color:#111}.section{border-color:#ddd}.card{border-color:#ddd}}
+</style>
 </head>
 <body>
-<div class="container">
-    <!-- 头部 -->
-    <div class="header">
-        <h1>📊 每日股市消息汇总</h1>
-        <div class="update-time">数据更新时间：2026-08-07 15:06（北京时间）</div>
-    </div>
+<div class="wrap">
 
-    <!-- 第一部分：全球市场表现 -->
-    <div class="section">
-        <div class="section-title"><span class="section-num">1</span>全球市场表现</div>
-        <div class="market-grid">
-            <div class="market-card">
-                <div><div class="name">🇺🇸 道琼斯工业</div><div class="value">53,885.10</div></div>
-                <div class="change down">-0.85%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇺🇸 标普500</div><div class="value">7,709.96</div></div>
-                <div class="change down">-0.18%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇺🇸 纳斯达克</div><div class="value">26,348.35</div></div>
-                <div class="change down">-0.06%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇨🇳 上证指数</div><div class="value">≈3,940</div></div>
-                <div class="change up">+1.02%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇨🇳 深证成指</div><div class="value">≈14,310</div></div>
-                <div class="change up">+1.42%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇨🇳 创业板指</div><div class="value">≈3,563</div></div>
-                <div class="change up">+1.35%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇭🇰 恒生指数</div><div class="value">25,530.28</div></div>
-                <div class="change down">-1.49%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇭🇰 恒生科技</div><div class="value">--</div></div>
-                <div class="change down">-2.28%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇯🇵 日经225</div><div class="value">65,606.71</div></div>
-                <div class="change down">-0.12%</div>
-            </div>
-            <div class="market-card">
-                <div><div class="name">🇰🇷 韩国KOSPI</div><div class="value">6,258.77</div></div>
-                <div class="change down">-0.60%</div>
-            </div>
-        </div>
-        <div style="margin-top:12px;font-size:12px;color:#888;">
-            📌 美股8月6日收盘 | A股/港股/日韩8月7日收盘 | 两市成交约2.66万亿元，放量1356亿<br>
-            📌 韩国KOSPI本周跌超5%，连续第七周下跌，创2022年12月以来最长连跌纪录<br>
-            📌 现货黄金日内冲高至4347美元/盎司，涨1.12%；前日曾触及4304美元阶段新高
-        </div>
-    </div>
+<!-- HEADER -->
+<div class="header">
+<h1>📊 每日股市消息汇总</h1>
+<div class="sub">全球市场 · 板块利好利空 · 走势预判 · 关注方向 · 基金配置</div>
+<div class="time-badge">数据更新时间：2026-08-07 22:25（北京时间）</div>
+</div>
 
-    <!-- 第二部分：板块利好利空 -->
-    <div class="section">
-        <div class="section-title"><span class="section-num">2</span>重点板块利好 / 利空梳理</div>
-        <table class="sector-table">
-            <thead>
-                <tr><th style="width:80px;">板块</th><th>利好因素</th><th>利空因素</th></tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>科技</strong></td>
-                    <td>
-                        <span class="tag tag-bull">利好</span>英伟达CPO全面量产，板块获资金追捧<br>
-                        <span class="tag tag-bull">利好</span>SpaceX全线AI卫星搭载英伟达GPU<br>
-                        <span class="tag tag-bull">利好</span>Grok 4.6今日发布，多模态突破预期<br>
-                        <span class="tag tag-bull">利好</span>招商证券：科技调整基本告一段落
-                    </td>
-                    <td>
-                        <span class="tag tag-bear">利空</span>美国拟禁止进口中国光模块<br>
-                        <span class="tag tag-bear">利空</span>存储芯片景气争议，A股芯片指数年内高点回撤24%<br>
-                        <span class="tag tag-bear">利空</span>商务部公布对美反制清单，贸易摩擦升级
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>工业有色</strong></td>
-                    <td>
-                        <span class="tag tag-bull">利好</span>刚果(金)限制铜钴精矿出口，供给收紧<br>
-                        <span class="tag tag-bull">利好</span>美国限制钨废料出口，战略金属涨价预期<br>
-                        <span class="tag tag-bull">利好</span>ADP数据不及预期，降息利好大宗商品
-                    </td>
-                    <td>
-                        <span class="tag tag-bear">利空</span>全球贸易摩擦不确定性<br>
-                        <span class="tag tag-bear">利空</span>短期涨幅较大，获利回吐压力
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>机器人</strong></td>
-                    <td>
-                        <span class="tag tag-bull">利好</span>宇树科技8月5日科创板上市，情绪催化<br>
-                        <span class="tag tag-bull">利好</span>8月世界机器人大会即将召开<br>
-                        <span class="tag tag-bull">利好</span>工信部：2026年人形机器人产量有望突破10万台<br>
-                        <span class="tag tag-bull">利好</span>今日盘面人形机器人概念走强
-                    </td>
-                    <td>
-                        <span class="tag tag-bear">利空</span>前期涨幅较大，短线资金兑现<br>
-                        <span class="tag tag-bear">利空</span>商业化落地仍需时间验证
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>电网设备</strong></td>
-                    <td>
-                        <span class="tag tag-bull">利好</span>政治局会议定调"六张网"新基建<br>
-                        <span class="tag tag-bull">利好</span>电网投资内外景气共振，Q1投资高增<br>
-                        <span class="tag tag-bull">利好</span>全年最强政策赛道，订单能见度高
-                    </td>
-                    <td>
-                        <span class="tag tag-bear">利空</span>短期估值偏高，部分标的涨幅已大<br>
-                        <span class="tag tag-bear">利空</span>今日盘面水利水电题材分化
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>黄金</strong></td>
-                    <td>
-                        <span class="tag tag-bull">利好</span>ADP就业大幅不及预期，降息预期升温<br>
-                        <span class="tag tag-bull">利好</span>全球央行Q2购金288.9吨，同比+62%<br>
-                        <span class="tag tag-bull">利好</span>伊朗霍尔木兹海峡局势紧张<br>
-                        <span class="tag tag-bull">利好</span>近三日金价累计涨超5%，趋势明确
-                    </td>
-                    <td>
-                        <span class="tag tag-bear">利空</span>4300美元关口试探失败，短线获利盘抛压<br>
-                        <span class="tag tag-bear">利空</span>美元指数回升至99.95<br>
-                        <span class="tag tag-bear">利空</span>今晚非农数据或引发波动
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>黄金股票</strong></td>
-                    <td>
-                        <span class="tag tag-bull">利好</span>金价维持4200+高位，矿企利润丰厚<br>
-                        <span class="tag tag-bull">利好</span>降息周期利好贵金属板块估值修复
-                    </td>
-                    <td>
-                        <span class="tag tag-bear">利空</span>今日A股黄金概念早盘走弱<br>
-                        <span class="tag tag-bear">利空</span>连续暴涨后技术性回调需求<br>
-                        <span class="tag tag-bear">利空</span>短线资金集中兑现
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<!-- PART 1 -->
+<div class="section">
+<div class="sec-title"><span class="num">1</span>全球市场表现</div>
 
-    <!-- 第三部分：A股走势预判 -->
-    <div class="section">
-        <div class="section-title"><span class="section-num">3</span>今日A股走势复盘与短期预判</div>
-        <div style="margin-bottom:16px;padding:12px;background:rgba(255,215,0,0.06);border-radius:10px;font-size:13px;line-height:1.8;">
-            <strong style="color:#ffd700;">📋 今日盘面总结：</strong>A股低开高走，三大指数集体收涨。早盘出现极端结构性分化（指数红盘、近八成个股下跌），午后资金完成再分配，硬科技板块放量跳水后资金向中小盘扩散，最终创业板指涨1.35%，全市场2856只上涨。成交额2.66万亿，放量明显。
-        </div>
-        
-        <div class="predict-item">
-            <div class="sector-name">🔬 科技（半导体/CPO/AI）</div>
-            <div class="detail">短期判断：<span class="highlight">震荡分化，高位博弈加剧</span>。硬科技午后出现大资金出逃信号，"硬切软"盘面确认。但CPO受英伟达量产催化仍有支撑，存储板块多空分歧明显。下周关注非农数据后科技股能否企稳，短线追高风险大。</div>
-        </div>
-        <div class="predict-item">
-            <div class="sector-name">⛏️ 工业有色</div>
-            <div class="detail">短期判断：<span class="highlight">中线偏多，短线震荡</span>。刚果(金)限矿+美国限制钨出口构成供给端利好，铜钴钨资源股中线逻辑加固。但今日盘面稀土、存储器走弱，短线需消化获利盘。关注洛阳钼业、紫金矿业方向。</div>
-        </div>
-        <div class="predict-item">
-            <div class="sector-name">🤖 机器人</div>
-            <div class="detail">短期判断：<span class="highlight">事件驱动，波段机会</span>。宇树科技上市+8月世界机器人大会双重催化，今日人形机器人概念走强。但板块前期涨幅已大，适合事件驱动型波段操作，不宜重仓追高。关注减速器、伺服电机核心零部件方向。</div>
-        </div>
-        <div class="predict-item">
-            <div class="sector-name">⚡ 电网设备</div>
-            <div class="detail">短期判断：<span class="highlight">政策主线，中线看好</span>。"六张网"政策定调明确，电网投资高景气延续。今日盘面有所分化但中期逻辑不变，回调即是布局机会。重点关注特高压、智能电网、电力自动化龙头。</div>
-        </div>
-        <div class="predict-item">
-            <div class="sector-name">🥇 黄金（现货/期货）</div>
-            <div class="detail">短期判断：<span class="highlight">高位震荡，等待非农指引</span>。金价从4304高点回落后在4227-4350区间震荡，今晚非农数据是关键变量。若数据疲弱则降息预期进一步升温，金价有望再攻4300+；若数据强劲则短线承压。中线趋势仍偏多。</div>
-        </div>
-        <div class="predict-item">
-            <div class="sector-name">📈 黄金股票</div>
-            <div class="detail">短期判断：<span class="highlight">跟随金价波动，短线承压</span>。今日A股黄金概念早盘走弱，连续暴涨后技术回调。但金价维持4200+高位对矿企利润支撑明确，回调后仍具配置价值。下周关注非农后方向选择。</div>
-        </div>
-    </div>
+<div class="alert-box">
+🚨 <strong style="color:#f85149">今晚重磅：美国7月非农"黑天鹅"！</strong><br>
+7月非农就业 <span class="hl">减少2.3万人</span>（预期+8万），为2月以来首次转负！5-6月合计下修10.3万。失业率4.1%（预期4.2%）。数据公布后：黄金暴涨130美元突破4370、美股直线拉升、美元跳水、加息预期大幅降温。
+</div>
 
-    <!-- 第四部分：今日关注方向 -->
-    <div class="section">
-        <div class="section-title"><span class="section-num">4</span>建议关注方向</div>
-        
-        <div class="focus-card">
-            <div class="title">🥇 方向一：算力网络 + 新型电网（"六张网"）</div>
-            <div class="desc">政治局会议明确定调"六张网"新基建为全年最强政策赛道。算力硬件（高速光模块、存储芯片、数据中心电力设备）+ 新型电网（特高压、智能配电）有望持续获得政策加码和资金关注。</div>
-            <div class="source">来源：7月政治局会议 / 银河证券8月策略 / 招商证券8月观点</div>
-        </div>
-        
-        <div class="focus-card">
-            <div class="title">🥈 方向二：半导体设备国产替代 + 存储周期反转</div>
-            <div class="desc">招商证券指出科技方向调整基本告一段落，半导体（存储周期反转、设备国产替代）是核心成长主线。大基金三期+补贴政策持续加码，中报业绩验证期优选有真实订单标的。</div>
-            <div class="source">来源：招商证券《否极泰来，蓄势进攻》/ 大基金三期动态</div>
-        </div>
-        
-        <div class="focus-card">
-            <div class="title">🥉 方向三：人形机器人（事件催化波段）</div>
-            <div class="desc">8月世界机器人大会即将召开，宇树科技科创板上市带动板块情绪。工信部明确2026年产量目标10万台，产业从技术研发转向规模制造。适合波段参与，聚焦减速器、传感器、电机零部件。</div>
-            <div class="source">来源：工信部 / 世界机器人大会组委会 / 多家券商8月策略</div>
-        </div>
-        
-        <div class="focus-card">
-            <div class="title">🏅 方向四：黄金及贵金属（降息+避险）</div>
-            <div class="desc">ADP数据大幅不及预期→降息预期升温→金价中枢上移。全球央行持续增持黄金（Q2净买入288.9吨创纪录），地缘风险（霍尔木兹海峡）提供额外支撑。中线配置价值明确。</div>
-            <div class="source">来源：世界黄金协会 / 美联储降息预期 / 地缘局势</div>
-        </div>
-        
-        <div class="focus-card">
-            <div class="title">🎖️ 方向五：工业有色（战略金属供给收紧）</div>
-            <div class="desc">刚果(金)限制铜钴出口+美国限制钨废料出口，全球战略金属供给端持续收紧。叠加降息周期利好大宗商品定价，有色资源中线逻辑加固。关注铜、钴、钨、稀土方向。</div>
-            <div class="source">来源：刚果(金)矿业政策 / 美国出口管制 / 招商证券</div>
-        </div>
-    </div>
+<div class="grid">
+<div class="card"><div class="left"><div class="name">🇺🇸 道琼斯（8/7盘中）</div><div class="val">~54,100</div></div><div class="chg up">+0.4%</div></div>
+<div class="card"><div class="left"><div class="name">🇺🇸 标普500（8/7盘中）</div><div class="val">~7,750</div></div><div class="chg up">+0.5%</div></div>
+<div class="card"><div class="left"><div class="name">🇺🇸 纳斯达克（8/7盘中）</div><div class="val">~26,550</div></div><div class="chg up">+0.8%</div></div>
+<div class="card"><div class="left"><div class="name">🇺🇸 费城半导体（盘中）</div><div class="val">12,307</div></div><div class="chg up">+2.0%</div></div>
+<div class="card"><div class="left"><div class="name">🇨🇳 上证指数（8/7收盘）</div><div class="val">3,940.04</div></div><div class="chg up">+1.02%</div></div>
+<div class="card"><div class="left"><div class="name">🇨🇳 深证成指（8/7收盘）</div><div class="val">14,311.01</div></div><div class="chg up">+1.42%</div></div>
+<div class="card"><div class="left"><div class="name">🇨🇳 创业板指（8/7收盘）</div><div class="val">3,563.12</div></div><div class="chg up">+1.35%</div></div>
+<div class="card"><div class="left"><div class="name">🇨🇳 科创综指（8/7收盘）</div><div class="val">2,019.44</div></div><div class="chg up">+3.35%</div></div>
+<div class="card"><div class="left"><div class="name">🇭🇰 恒生指数（8/7收盘）</div><div class="val">25,668.03</div></div><div class="chg up">+0.54%</div></div>
+<div class="card"><div class="left"><div class="name">🇯🇵 日经225（8/7收盘）</div><div class="val">65,606.71</div></div><div class="chg down">-0.12%</div></div>
+<div class="card"><div class="left"><div class="name">🇰🇷 KOSPI（8/7收盘）</div><div class="val">6,170.42</div></div><div class="chg down">-2.0%</div></div>
+<div class="card"><div class="left"><div class="name">🥇 现货黄金（盘中）</div><div class="val">4,370+</div></div><div class="chg up">+3.2%</div></div>
+</div>
+<div style="margin-top:14px;font-size:12px;color:#8b949e;line-height:1.9">
+📌 A股两市成交 <span class="hl">2.68万亿</span>，较前日放量1356亿，量价配合健康<br>
+📌 美股8/6收盘：道指-0.85%终结五连阳（53885），存储芯片暴跌（西部数据-13%）<br>
+📌 美股8/7盘中：高开后非农数据刺激直线拉升，费半+2%，AI硬件走强<br>
+📌 韩KOSPI跌2%至6170，SK海力士跌超5%，散户携46亿美元重返美股<br>
+📌 日经早盘一度跌1%，芯片股领跌（软银-6.1%），午后收窄至-0.12%<br>
+📌 黄金晚间暴涨130美元：COMEX期金站上4430，现货突破4370，国内突破940元/克<br>
+📌 美元指数跳水至99.6附近，非美货币全线上涨
+</div>
+</div>
 
-    <!-- 第五部分：场外基金推荐 -->
-    <div class="section">
-        <div class="section-title"><span class="section-num">5</span>可关注场外基金（非A类 / ETF联接C）</div>
-        <div style="margin-bottom:14px;font-size:12px;color:#999;">⚠️ 以下为跟踪对应方向的场外基金，适合无证券账户投资者。C类份额免申购费、持有7天以上免赎回费，适合中短期持有。</div>
-        
-        <table class="fund-table">
-            <thead>
-                <tr><th>方向</th><th>基金名称</th><th>代码</th><th>类型</th></tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td rowspan="2"><strong>科技/芯片</strong></td>
-                    <td>天弘中证芯片产业ETF联接C</td>
-                    <td>012553</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td>华夏中证人工智能ETF联接C</td>
-                    <td>011072</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td rowspan="2"><strong>电网设备</strong></td>
-                    <td>华夏中证电网设备ETF联接C</td>
-                    <td>018833</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td>广发中证电力设备ETF联接C</td>
-                    <td>016873</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td rowspan="2"><strong>机器人</strong></td>
-                    <td>华夏中证机器人ETF联接C</td>
-                    <td>018345</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td>汇添富中证机器人ETF联接C</td>
-                    <td>019547</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td rowspan="2"><strong>黄金</strong></td>
-                    <td>华安黄金ETF联接C</td>
-                    <td>000217</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td>易方达黄金ETF联接C</td>
-                    <td>002963</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td rowspan="2"><strong>黄金股票</strong></td>
-                    <td>永赢中证沪深港黄金产业ETF联接C</td>
-                    <td>020412</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td>国泰中证黄金股票ETF联接C</td>
-                    <td>018741</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td rowspan="2"><strong>工业有色</strong></td>
-                    <td>天弘中证工业有色金属ETF联接C</td>
-                    <td>017193</td>
-                    <td>ETF联接C</td>
-                </tr>
-                <tr>
-                    <td>南方中证申万有色金属ETF联接C</td>
-                    <td>004433</td>
-                    <td>ETF联接C</td>
-                </tr>
-            </tbody>
-        </table>
-        <div style="margin-top:12px;font-size:12px;color:#888;line-height:1.6;">
-            💡 操作建议：当前市场结构性分化明显，建议分批建仓、避免一次性重仓。科技方向回调中分批布局，黄金/有色可逢回调加仓，机器人以事件驱动波段思路参与。
-        </div>
-    </div>
+<!-- PART 2 -->
+<div class="section">
+<div class="sec-title"><span class="num">2</span>重点板块利好 / 利空梳理</div>
+<table>
+<thead><tr><th style="width:70px">板块</th><th>✅ 利好因素</th><th>❌ 利空因素</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>科技</strong></td>
+<td>
+<span class="tag tag-b">利好</span>高盛大幅上调AI服务器PCB/CCL市场规模（2028年PCB达840亿美元）<br>
+<span class="tag tag-b">利好</span>今日PCB板块16股涨停，CPO全面爆发，科创综指+3.35%<br>
+<span class="tag tag-b">利好</span>英伟达Rubin架构PCB价值量从320→3100美元（近10倍跃升）<br>
+<span class="tag tag-b">利好</span>美股今晚费半+2%，英伟达+1.2%，ARM+3.5%，AI硬件回暖<br>
+<span class="tag tag-b">利好</span>内存价格高位或维持到2028年底（美光等确认）
+</td>
+<td>
+<span class="tag tag-s">利空</span>隔夜美股存储芯片暴跌（西部数据-13%），周期见顶争议<br>
+<span class="tag tag-s">利空</span>韩SK海力士月跌超35%，KOSPI跌2%，全球存储情绪低迷<br>
+<span class="tag tag-s">利空</span>FCC新规升级意见稿：从厂商身份管控升级为"厂商+生产属地"双维度<br>
+<span class="tag tag-s">利空</span>公募电子持仓43%创新高，拥挤度风险待释放
+</td>
+</tr>
+<tr>
+<td><strong>工业有色</strong></td>
+<td>
+<span class="tag tag-b">利好</span>刚果(金)正式禁止铜精矿、钴精矿出口，全球供给骤紧<br>
+<span class="tag tag-b">利好</span>伦敦铜逼近14400美元/吨历史高位，日涨1.8%<br>
+<span class="tag tag-b">利好</span>中信证券8/7研报：刚果金禁令或推铜价创新高<br>
+<span class="tag tag-b">利好</span>中国钨出口管制升级，战略金属定价权强化<br>
+<span class="tag tag-b">利好</span>非农利空→降息预期升温→利好大宗商品定价
+</td>
+<td>
+<span class="tag tag-s">利空</span>刚果金铜矿占全球仅0.3%，象征意义大于实质影响<br>
+<span class="tag tag-s">利空</span>今日A股稀土、存储器板块走弱，短线分歧<br>
+<span class="tag tag-s">利空</span>短期涨幅较大，获利回吐压力
+</td>
+</tr>
+<tr>
+<td><strong>机器人</strong></td>
+<td>
+<span class="tag tag-b">利好</span>宇树科技IPO定价150.8元/股，市值609亿，下周一(8/10)申购<br>
+<span class="tag tag-b">利好</span>今日人形机器人概念走强，PCB/丝杠/传感器活跃<br>
+<span class="tag tag-b">利好</span>国家电网68亿采购8500台机器人，B端大单持续落地<br>
+<span class="tag tag-b">利好</span>8月世界机器人大会即将召开，事件催化密集
+</td>
+<td>
+<span class="tag tag-s">利空</span>宇树Q1扣非净利下滑52.55%，"增收不增利"<br>
+<span class="tag tag-s">利空</span>板块前期涨幅大，IPO后或有资金兑现<br>
+<span class="tag tag-s">利空</span>商业化落地仍需验证，纯概念股风险高
+</td>
+</tr>
+<tr>
+<td><strong>电网设备</strong></td>
+<td>
+<span class="tag tag-b">利好</span>7/30政治局会议再次强调"扎实推进六张网规划建设"<br>
+<span class="tag tag-b">利好</span>"六张网"2026年投资超7万亿，"十五五"整体近20万亿<br>
+<span class="tag tag-b">利好</span>国网前三批特高压招标292.6亿，超2025全年220亿<br>
+<span class="tag tag-b">利好</span>下半年项目与资金集中投放，万亿级产业链拉动<br>
+<span class="tag tag-b">利好</span>今日水利水电题材走强，基建施工旺季预期
+</td>
+<td>
+<span class="tag tag-s">利空</span>7月末快速拉升后短期获利盘压力<br>
+<span class="tag tag-s">利空</span>部分无订单支撑的小票面临估值回归<br>
+<span class="tag tag-s">利空</span>资金今日更偏向PCB/医药，电网未获主力加仓
+</td>
+</tr>
+<tr>
+<td><strong>黄金</strong></td>
+<td>
+<span class="tag tag-b">利好</span>🔥 7月非农-2.3万（预期+8万），降息预期大幅升温<br>
+<span class="tag tag-b">利好</span>黄金今晚暴涨130美元，现货突破4370，期金站上4430<br>
+<span class="tag tag-b">利好</span>中国央行连续21个月增持黄金（7月末7608万盎司）<br>
+<span class="tag tag-b">利好</span>伊朗霍尔木兹海峡局势紧张，避险需求持续<br>
+<span class="tag tag-b">利好</span>5-6月非农合计下修10.3万，就业恶化趋势确认
+</td>
+<td>
+<span class="tag tag-s">利空</span>单日暴涨后短线获利盘抛压巨大<br>
+<span class="tag tag-s">利空</span>4400-4430区间或遇阻力，需消化涨幅<br>
+<span class="tag tag-s">利空</span>下周CPI数据若超预期通胀，或制约降息空间
+</td>
+</tr>
+<tr>
+<td><strong>黄金股票</strong></td>
+<td>
+<span class="tag tag-b">利好</span>金价突破4370美元，矿企利润弹性极大<br>
+<span class="tag tag-b">利好</span>降息周期确认→贵金属板块估值修复<br>
+<span class="tag tag-b">利好</span>今日A股贵金属板块涨2.78%，资金关注度高
+</td>
+<td>
+<span class="tag tag-s">利空</span>今日早盘黄金概念一度走弱（非农前观望）<br>
+<span class="tag tag-s">利空</span>连续暴涨后技术性回调需求<br>
+<span class="tag tag-s">利空</span>下周一开盘或高开低走（利好兑现）
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-    <!-- 免责声明 -->
-    <div class="disclaimer">
-        ⚠️ <strong>免责声明</strong>：以上内容仅为公开市场信息整理与个人分析，不构成任何投资建议。<br>
-        股市有风险，投资需谨慎。基金过往业绩不代表未来表现，请根据自身风险承受能力独立决策。<br>
-        数据来源：新浪财经、东方财富、同花顺、金投网、财华社等公开渠道
-    </div>
+<!-- PART 3 -->
+<div class="section">
+<div class="sec-title"><span class="num">3</span>下一交易日（8/10周一）A股走势预判</div>
+<div class="summary-box">
+<strong style="color:#f0b429">📋 今晚核心变量：</strong>美国7月非农数据"黑天鹅"（-2.3万 vs 预期+8万），5-6月合计下修10.3万。市场解读为"加息彻底搁置、降息窗口打开"。黄金暴涨、美股拉升、美元跳水。这一数据将深刻影响下周一A股开盘情绪，尤其是贵金属、有色、科技成长方向。
+</div>
+
+<div class="predict">
+<div class="p-name">🔬 科技（PCB/CPO/AI算力）</div>
+<div class="p-body">短期判断：<span class="hl">延续强势，但需防高位分歧</span>。今日PCB 16股涨停+科创综指+3.35%确认主线地位，高盛上调AI服务器PCB预测至840亿美元提供基本面支撑。今晚美股费半+2%、AI硬件走强形成正反馈。下周一大概率惯性冲高，但需警惕：连续大涨后分歧加大，追高风险增加。策略：持有为主，回调加仓，不追涨停。</div>
+</div>
+<div class="predict">
+<div class="p-name">⛏️ 工业有色（铜/钴/钨）</div>
+<div class="p-body">短期判断：<span class="hl">非农利好+供给收紧双重催化，偏多</span>。今晚非农大幅不及预期→降息预期升温→美元走弱→大宗商品受益。叠加刚果(金)铜钴出口禁令、中国钨管制升级，供给端逻辑加固。下周一有色板块有望高开，关注紫金矿业、洛阳钼业、华友钴业方向。但需注意：若周一高开幅度过大（>3%），短线追高需谨慎。</div>
+</div>
+<div class="predict">
+<div class="p-name">🤖 机器人（人形机器人/核心零部件）</div>
+<div class="p-body">短期判断：<span class="hl">事件催化窗口开启，关注宇树申购效应</span>。下周一(8/10)宇树科技科创板申购，定价150.8元、市值609亿，"人形机器人第一股"上市将带动全产业链重估。今日板块已有预热（人形机器人概念走强）。下周一预计板块情绪进一步升温，但需警惕"申购日即高点"的兑现效应。聚焦减速器、传感器、电机零部件，回避纯概念。</div>
+</div>
+<div class="predict">
+<div class="p-name">⚡ 电网设备（特高压/智能配电）</div>
+<div class="p-body">短期判断：<span class="hl">政策主线不变，回调即机会</span>。7/30政治局会议再次定调"扎实推进六张网"，全年投资超7万亿确定性极强。今日板块未获主力大幅加仓（资金偏向PCB/医药），但中线逻辑最为扎实。下周一若大盘因非农利好高开，电网设备有望跟随修复。策略：中线底仓持有，回调5%以上可加仓。</div>
+</div>
+<div class="predict">
+<div class="p-name">🥇 黄金（现货/期货）</div>
+<div class="p-body">短期判断：<span class="hl">强势突破，但短线需防冲高回落</span>。今晚非农"黑天鹅"直接引爆黄金：现货暴涨130美元突破4370，期金站上4430。降息预期大幅升温+央行持续购金+地缘避险三重驱动。中线目标看4500-4800美元。但单日涨幅过大，下周一国内金价（沪金）预计高开2-3%后或有震荡，追高需控制仓位。回调至4300-4320区间可加仓。</div>
+</div>
+<div class="predict">
+<div class="p-name">📈 黄金股票（贵金属矿业）</div>
+<div class="p-body">短期判断：<span class="hl">下周一大概率高开，弹性大于金价本身</span>。今晚金价暴涨3%+，矿企利润弹性为金价的2-3倍。今日A股贵金属板块已涨2.78%，下周一预计高开3-5%。但需警惕"利好兑现"风险——连续暴涨后部分资金或选择周一获利了结。策略：已持有者持股待涨，未上车者等开盘30分钟后确认方向再介入。</div>
+</div>
+</div>
+
+<!-- PART 4 -->
+<div class="section">
+<div class="sec-title"><span class="num">4</span>建议关注方向</div>
+
+<div class="focus">
+<div class="f-title">🥇 方向一：黄金及贵金属（非农黑天鹅→降息确认）</div>
+<div class="f-desc">7月非农-2.3万（预期+8万），5-6月合计下修10.3万，就业市场恶化趋势确认。市场已从"是否加息"转向"何时降息"。黄金今晚暴涨130美元，中国央行连续21个月增持，全球央行H1购金345吨。机构目标价4500-4800美元。中线最强确定性方向。</div>
+<div class="f-src">来源：美国劳工部7月非农数据 / 中国人民银行储备数据 / 世界黄金协会 / 高盛、花旗贵金属研报</div>
+</div>
+
+<div class="focus">
+<div class="f-title">🥈 方向二：AI算力硬件（PCB/CPO/光模块）</div>
+<div class="f-desc">高盛8/7大幅上调AI服务器PCB市场预测（2028年840亿美元，较此前+38%），CCL市场480亿美元（+18%）。英伟达Rubin架构PCB价值量跃升近10倍（320→3100美元）。今日PCB 16股涨停确认资金共识。科创综指+3.35%领涨全市场。招商证券：科技调整基本告一段落，超跌反弹布局。</div>
+<div class="f-src">来源：高盛8/7研报 / 英伟达Rubin架构BOM拆解 / 招商证券8月策略 / 中信证券</div>
+</div>
+
+<div class="focus">
+<div class="f-title">🥉 方向三：电网设备 + "六张网"新基建</div>
+<div class="f-desc">7/30政治局会议再次明确"扎实推进六张网规划建设"。2026年"六张网"投资超7万亿，"十五五"整体近20万亿。国网前三批特高压招标292.6亿已超去年全年，下半年项目集中投放。新型电网（特高压+智能配电+储能）是确定性最强的政策主线。</div>
+<div class="f-src">来源：7/30中央政治局会议 / 国家发改委 / 国家电网招标数据 / 国务院常务会议</div>
+</div>
+
+<div class="focus">
+<div class="f-title">🏅 方向四：工业有色（铜钴钨供给收紧+降息利好）</div>
+<div class="f-desc">刚果(金)正式禁止铜精矿钴精矿出口（全球钴供给70%来自刚果金），中信证券看多铜价创新高。中国钨出口管制升级。今晚非农利空→降息预期→美元走弱→大宗商品全线受益。伦敦铜逼近14400美元历史高位。供给收紧+货币宽松双击。</div>
+<div class="f-src">来源：刚果(金)矿业部行政令 / 中信证券《刚果金出口禁令或推升铜价创出新高》/ 路透社</div>
+</div>
+
+<div class="focus">
+<div class="f-title">🎖️ 方向五：人形机器人（宇树IPO+量产元年）</div>
+<div class="f-desc">宇树科技8/10科创板申购（定价150.8元，市值609亿），"人形机器人第一股"上市带动全产业链重估。国家电网68亿采购8500台大单落地，工信部明确2026年产量目标10万台。8月世界机器人大会催化。适合事件驱动型波段参与。</div>
+<div class="f-src">来源：宇树科技IPO公告 / 国家电网采购公告 / 工信部 / 世界机器人大会组委会</div>
+</div>
+</div>
+
+<!-- PART 5 -->
+<div class="section">
+<div class="sec-title"><span class="num">5</span>场外基金关注（非A类 / ETF联接C）</div>
+<div style="font-size:12px;color:#8b949e;margin-bottom:12px">⚠️ C类份额免申购费、持有7天以上免赎回费，适合中短期持有。可在支付宝/天天基金/各券商APP场外购买。</div>
+
+<table class="fund-tbl">
+<thead><tr><th>方向</th><th>基金名称</th><th>代码</th><th>类型</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td rowspan="2"><strong>黄金</strong></td><td>华安黄金ETF联接C</td><td>000217</td><td>ETF联接C</td><td>规模最大，跟踪Au9999</td></tr>
+<tr><td>易方达黄金ETF联接C</td><td>002963</td><td>ETF联接C</td><td>费率低，流动性好</td></tr>
+<tr><td rowspan="2"><strong>黄金股票</strong></td><td>永赢中证黄金产业ETF联接C</td><td>020412</td><td>ETF联接C</td><td>覆盖紫金、中金黄金等矿企</td></tr>
+<tr><td>国泰中证黄金股票ETF联接C</td><td>018741</td><td>ETF联接C</td><td>弹性大于实物黄金2-3倍</td></tr>
+<tr><td rowspan="2"><strong>工业有色</strong></td><td>华夏有色金属ETF联接C</td><td>016708</td><td>ETF联接C</td><td>重仓紫金、洛阳钼业、北方稀土</td></tr>
+<tr><td>国泰有色矿业ETF联接C</td><td>018168</td><td>ETF联接C</td><td>聚焦矿业上游，弹性更大</td></tr>
+<tr><td rowspan="2"><strong>电网设备</strong></td><td>华夏中证电网设备ETF联接C</td><td>018833</td><td>ETF联接C</td><td>覆盖特高压+智能电网</td></tr>
+<tr><td>广发中证电力设备ETF联接C</td><td>016873</td><td>ETF联接C</td><td>含电力自动化龙头</td></tr>
+<tr><td rowspan="2"><strong>机器人</strong></td><td>银华中证机器人ETF联接C</td><td>027234</td><td>ETF联接C</td><td>今日净值+1.10%，跟踪中证机器人</td></tr>
+<tr><td>汇添富中证机器人ETF联接C</td><td>019547</td><td>ETF联接C</td><td>覆盖减速器、传感器、电机</td></tr>
+<tr><td rowspan="2"><strong>科技/芯片</strong></td><td>天弘中证芯片产业ETF联接C</td><td>012553</td><td>ETF联接C</td><td>聚焦半导体设备+设计</td></tr>
+<tr><td>华夏中证人工智能ETF联接C</td><td>011072</td><td>ETF联接C</td><td>覆盖AI算力+光模块+PCB</td></tr>
+</tbody>
+</table>
+
+<div style="margin-top:14px;padding:12px;background:rgba(240,180,41,.06);border-radius:8px;font-size:12px;color:#c9d1d9;line-height:1.8">
+💡 <strong>下周配置建议（基于今晚非农数据后调整）：</strong><br>
+• <strong>进攻仓（35%）</strong>：黄金 + 黄金股票 → 非农黑天鹅后最强确定性，周一高开可分批止盈<br>
+• <strong>成长仓（30%）</strong>：科技/芯片（PCB/CPO方向）→ 高盛上调预测+科创综指领涨，持有为主<br>
+• <strong>政策仓（20%）</strong>：电网设备 → "六张网"7万亿+政治局定调，中线底仓不动<br>
+• <strong>弹性仓（10%）</strong>：工业有色 + 机器人 → 供给收紧+宇树IPO事件催化<br>
+• <strong>机动仓（5%）</strong>：现金 → 下周CPI数据前保留灵活度<br><br>
+⚠️ <strong>关键风险提示：</strong>下周一黄金/有色大概率高开，切勿集合竞价追涨。建议开盘30分钟后观察量能再决策。下周关注：美国CPI数据、宇树科技申购(8/10)、世界机器人大会。
+</div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="note">
+⚠️ <strong>免责声明</strong>：以上内容仅为公开市场信息整理与个人分析，不构成任何投资建议。<br>
+股市有风险，投资需谨慎。基金过往业绩不代表未来表现，请根据自身风险承受能力独立决策。<br>
+数据来源：新华社、东方财富、同花顺、今日头条、新浪财经、每日经济新闻、金价查询网、美国政府劳工部等公开渠道
+</div>
+
 </div>
 </body>
 </html>
