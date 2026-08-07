@@ -89,19 +89,29 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:14.
 .nb{background:#fffbeb;border:1px solid #fbbf24;border-radius:11px;padding:12px 14px;font-size:12px;color:#92400e;line-height:1.75;margin-top:12px}
 .nb b{color:#78350f}
 
-/* Calendar */
-.cal{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}
-.cd{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:11px;box-shadow:var(--sh);min-width:118px}
-.cd b{display:block;color:var(--blue);font-size:11.5px;margin-bottom:2px}
+/* Fund cards (Part 5 mobile optimized) */
+.fund-list{display:flex;flex-direction:column;gap:10px}
+.fund-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:8px}
+.fc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.fc-name{font-size:14.5px;font-weight:800;color:var(--navy)}
+.fc-code{font-size:11px;color:var(--sub);margin-top:3px;line-height:1.5;word-break:break-all}
+.fc-badge{flex-shrink:0}
+.fc-perf{font-size:12px;font-weight:700;padding:4px 10px;border-radius:8px;display:inline-block;width:fit-content}
+.fc-perf.up{background:#fef2f2;color:var(--red)}
+.fc-perf.dn{background:#f0fdf4;color:var(--green)}
+.fc-perf.nt{background:#f1f5f9;color:var(--sub)}
+.fc-idea{font-size:12.5px;line-height:1.7;color:#334155;padding-top:8px;border-top:1px dashed var(--line)}
+.fc-idea b{color:var(--navy)}
 
 .ftr{background:var(--navy);color:rgba(255,255,255,.55);font-size:10.5px;line-height:1.8;text-align:center;padding:18px 16px;border-radius:14px;margin-top:22px}
 
 @media(min-width:680px){
   .mgrid{grid-template-columns:repeat(4,1fr)}
   .ig{grid-template-columns:1fr 1fr}
+  .fund-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .hdr h1{font-size:26px}
 }
-@media print{body{background:#fff}.sc,.ic,.mi,.tb{break-inside:avoid;box-shadow:none}}
+@media print{body{background:#fff}.sc,.ic,.mi,.tb,.fund-card{break-inside:avoid;box-shadow:none}}
 </style>
 </head>
 <body>
@@ -299,20 +309,94 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:14.
   <div class="ic"><div class="s">📌 8月关键日历</div><div class="c">8/10宇树申购 → 8/12缴款 → 8/19-23世界机器人大会 → 8/20 LPR → 8/21期指交割 → 8/26期权交割 → 8/27-29杰克逊霍尔年会 → 8/31中报截止</div></div>
 </div>
 
-<!-- ══════ 第五部分 ══════ -->
+<!-- ══════ 第五部分（移动端卡片版） ══════ -->
 <div class="sec">📋 五、场外基金关注 <small>非A类/ETF联接C · 底仓前瞻</small></div>
-<table class="tb">
-<thead><tr><th>赛道/标的</th><th style="width:70px">近期</th><th style="width:86px">底仓前瞻</th><th>操作思路</th></tr></thead>
-<tbody>
-<tr><td class="sn">🤖 机器人<br><span style="font-size:10px;color:var(--sub)">华夏中证机器人ETF联接C 018345</span></td><td class="up">强势</td><td><span class="bg u">✅ 可建底仓</span></td><td>8月超级月催化密集，回调分批建仓；事件前持有、大会后逐步止盈，仓位≤10%</td></tr>
-<tr><td class="sn">💊 创新药/CXO<br><span style="font-size:10px;color:var(--sub)">创新药ETF联接C（中证创新药产业指数）</span></td><td class="up">爆发</td><td><span class="bg u">✅ 定投建仓</span></td><td>业绩+出海双催化但短线涨幅大，不追单日暴涨，每周定投摊薄；中长期持有看业绩兑现</td></tr>
-<tr><td class="sn">⚡ 电力<br><span style="font-size:10px;color:var(--sub)">电力ETF联接C（全指电力公用事业）</span></td><td class="up">周领涨</td><td><span class="bg u">✅ 底仓配置</span></td><td>高股息+迎峰度夏+新型电力系统，压舱石属性，无需择时，仓位10%</td></tr>
-<tr><td class="sn">🔌 电网设备<br><span style="font-size:10px;color:var(--sub)">电网设备/新型电力系统主题联接C</span></td><td class="up">政策驱动</td><td><span class="bg u">✅ 回调建仓</span></td><td>「十五五」规划贯穿周期，回调即机会，中线持有3-6个月</td></tr>
-<tr><td class="sn">⛏️ 有色<br><span style="font-size:10px;color:var(--sub)">有色金属ETF联接C（如南方004433）</span></td><td class="nt">资金流入</td><td><span class="bg w">⚠️ 小仓试探</span></td><td>机构增配方向但衰退交易扰动，仓位≤5%定投，稀土/贵金属主题优于纯工业金属</td></tr>
-<tr><td class="sn">🥇 黄金<br><span style="font-size:10px;color:var(--sub)">黄金ETF联接C（华安000217/易方达000308）</span></td><td class="up">隔夜暴涨</td><td><span class="bg s">⛔ 暂不追高</span></td><td>周一大概率高开，追高风险大；等冲高回落后分批建防御仓5-8%，C类满7天免赎回费</td></tr>
-<tr><td class="sn">💻 半导体/芯片<br><span style="font-size:10px;color:var(--sub)">芯片ETF联接C（国证芯片等）</span></td><td class="nt">分化大</td><td><span class="bg w">⚠️ 观望/定投</span></td><td>中报验证期波动加大，等8月中下旬业绩落地、错杀企稳后再分批介入</td></tr>
-</tbody>
-</table>
+
+<div class="fund-list">
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">🤖 机器人</div>
+        <div class="fc-code">华夏中证机器人ETF联接C 018345</div>
+      </div>
+      <span class="bg u fc-badge">✅ 可建底仓</span>
+    </div>
+    <div class="fc-perf up">近期：强势 ↑</div>
+    <div class="fc-idea">8月超级月催化密集，<b>回调分批建仓</b>；事件前持有、大会后逐步止盈，仓位≤10%</div>
+  </div>
+
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">💊 创新药/CXO</div>
+        <div class="fc-code">创新药ETF联接C（中证创新药产业指数）</div>
+      </div>
+      <span class="bg u fc-badge">✅ 定投建仓</span>
+    </div>
+    <div class="fc-perf up">近期：爆发 ↑</div>
+    <div class="fc-idea">业绩+出海双催化但短线涨幅大，<b>不追单日暴涨，每周定投摊薄</b>；中长期持有看业绩兑现</div>
+  </div>
+
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">⚡ 电力</div>
+        <div class="fc-code">电力ETF联接C（全指电力公用事业）</div>
+      </div>
+      <span class="bg u fc-badge">✅ 底仓配置</span>
+    </div>
+    <div class="fc-perf up">近期：周领涨 ↑</div>
+    <div class="fc-idea">高股息+迎峰度夏+新型电力系统，<b>压舱石属性，无需择时</b>，仓位10%</div>
+  </div>
+
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">🔌 电网设备</div>
+        <div class="fc-code">电网设备/新型电力系统主题联接C</div>
+      </div>
+      <span class="bg u fc-badge">✅ 回调建仓</span>
+    </div>
+    <div class="fc-perf up">近期：政策驱动 ↑</div>
+    <div class="fc-idea">「十五五」规划贯穿周期，<b>回调即机会</b>，中线持有3-6个月</div>
+  </div>
+
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">⛏️ 有色</div>
+        <div class="fc-code">有色金属ETF联接C（如南方004433）</div>
+      </div>
+      <span class="bg w fc-badge">⚠️ 小仓试探</span>
+    </div>
+    <div class="fc-perf nt">近期：资金流入 →</div>
+    <div class="fc-idea">机构增配方向但衰退交易扰动，<b>仓位≤5%定投</b>，稀土/贵金属主题优于纯工业金属</div>
+  </div>
+
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">🥇 黄金</div>
+        <div class="fc-code">黄金ETF联接C（华安000217/易方达000308）</div>
+      </div>
+      <span class="bg s fc-badge">⛔ 暂不追高</span>
+    </div>
+    <div class="fc-perf up">近期：隔夜暴涨 ↑</div>
+    <div class="fc-idea">周一大概率高开，追高风险大；<b>等冲高回落后分批建防御仓5-8%</b>，C类满7天免赎回费</div>
+  </div>
+
+  <div class="fund-card">
+    <div class="fc-head">
+      <div>
+        <div class="fc-name">💻 半导体/芯片</div>
+        <div class="fc-code">芯片ETF联接C（国证芯片等）</div>
+      </div>
+      <span class="bg w fc-badge">⚠️ 观望/定投</span>
+    </div>
+    <div class="fc-perf nt">近期：分化大 →</div>
+    <div class="fc-idea">中报验证期波动加大，<b>等8月中下旬业绩落地、错杀企稳后再分批介入</b></div>
+  </div>
+</div>
 
 <div class="nb">
 <b>📌 底仓前瞻总结：</b><br>
