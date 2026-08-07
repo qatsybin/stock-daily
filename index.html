@@ -1,1211 +1,493 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src * 'unsafe-inline'; script-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; media-src * data: blob:; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026年8月7日股市消息汇总报告</title>
-    <script src="https://image.uc.cn/s/uae/g/3n/mos-production/fontawesome-free-7.1.0-web/js/all.min.js"></script>
-    <script src="https://image.uc.cn/s/uae/g/3n/mos-production/0915/3.4.17.js"></script>
-    <script src="https://image.uc.cn/s/uae/g/3n/mos-production/0915/echarts.min.js"></script>
+    <title>每日股市消息汇总 - 2026年8月7日</title>
     <style>
-        /* 自定义CSS使用BEM命名法避免冲突 */
-        .custom-header-gradient {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
         }
-        
-        .custom-card-hover {
-            transition: all 0.3s ease;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
         }
-        
-        .custom-card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
         }
-        
-        .custom-section-divider {
-            height: -4px;
-            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+        .header h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
         }
-        
-        .custom-badge {
+        .header .update-time {
+            font-size: 14px;
+            color: #aaa;
+            background: rgba(255,255,255,0.05);
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
+            padding: 4px 16px;
+            border-radius: 20px;
+        }
+        .section {
+            margin-bottom: 28px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 4px solid #ffd700;
+            color: #fff;
+        }
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        .market-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .market-card .name { font-size: 14px; color: #ccc; }
+        .market-card .value { font-size: 13px; color: #999; margin-top: 2px; }
+        .market-card .change { font-size: 16px; font-weight: 700; }
+        .up { color: #ff4d4d; }
+        .down { color: #00c853; }
+        .neutral { color: #ffd700; }
+        
+        .sector-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .sector-table th {
+            background: rgba(255,215,0,0.15);
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sector-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            vertical-align: top;
+            line-height: 1.6;
+        }
+        .sector-table tr:hover { background: rgba(255,255,255,0.03); }
+        
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .tag-bull { background: rgba(255,77,77,0.2); color: #ff6b6b; }
+        .tag-bear { background: rgba(0,200,83,0.2); color: #69f0ae; }
+        
+        .predict-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .predict-item:last-child { border-bottom: none; }
+        .predict-item .sector-name {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 6px;
+        }
+        .predict-item .detail { font-size: 13px; line-height: 1.7; color: #ccc; }
+        
+        .focus-card {
+            background: rgba(255,215,0,0.05);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .focus-card .title {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .focus-card .desc { font-size: 13px; color: #bbb; line-height: 1.6; }
+        .focus-card .source { font-size: 11px; color: #888; margin-top: 6px; }
+        
+        .fund-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .fund-table th {
+            background: rgba(100,181,246,0.15);
+            padding: 10px 12px;
+            text-align: left;
+            color: #90caf9;
             font-weight: 600;
         }
-        
-        .custom-chart-container {
-            height: -400px;
-            width: 100%;
+        .fund-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
+        .fund-table tr:hover { background: rgba(255,255,255,0.03); }
         
-        .custom-fund-table tr:nth-child(even) {
-            background-color: #f8fafc;
+        .disclaimer {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(255,77,77,0.08);
+            border-radius: 10px;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            line-height: 1.8;
         }
-        
-        .custom-fund-table tr:hover {
-            background-color: #f1f5f9;
-        }
-        
-        .custom-timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-        
-        .custom-timeline::before {
-            content: '';
-            position: absolute;
-            left: 0.5rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #e2e8f0;
-        }
-        
-        .custom-timeline-item {
-            position: relative;
-            margin-bottom: -1.5rem;
-        }
-        
-        .custom-timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -1.5rem;
-            top: 0.5rem;
-            width: 1rem;
-            height: 1rem;
+        .highlight { color: #ffd700; font-weight: 600; }
+        .section-num {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
             border-radius: 50%;
-            background-color: #3b82f6;
-            border: 3px solid white;
-            box-shadow: 0 0 0 2px #3b82f6;
+            text-align: center;
+            line-height: 24px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #000;
+            margin-right: 8px;
         }
     </style>
-<script>
-!(function(j,a,g){j.__itrace_conf = {bid: 'kt40h0wl-koyh4af8',rel: '', uid: 'b5c7fcdc-6c9d-4744-97e7-1ded15d39b52' ,  spa: true, plugins:['jserror','interface','perf','resource','flow','blank']};var b = a.createElement("script");var d = a.getElementsByTagName("script")[0];b.type = "text/javascript";b.crossorigin = true;b.async = true;b.onload = function(){j.__itrace && j.__itrace.setReady()};d.parentNode.insertBefore(b,d);b.src = g})(window, document, "https://g.alicdn.com/woodpeckerx/itrace-next/itrace.iife.js")
-</script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-    <!-- 页面头部 -->
-    <header class="custom-header-gradient text-white py-8 px-4">
-        <div class="container mx-auto max-w-7xl">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div>
-                    <h1 class="text-3xl md:text-4xl font-bold mb-2">2026年8月7日股市消息汇总报告</h1>
-                    <div class="flex items-center space-x-4 mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-clock mr-2"></i>
-                            <span class="text-lg font-semibold">数据更新时间：2026-08-07 14:30</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-calendar-alt mr-2"></i>
-                            <span class="text-lg">星期五</span>
-                        </div>
-                    </div>
-                    <p class="text-gray-200 text-lg max-w-3xl">全球市场表现、板块分析、走势预判与投资建议一站式汇总</p>
-                </div>
-                <div class="mt-4 md:mt-0 bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <div class="flex items-center">
-                        <i class="fas fa-globe-americas text-2xl mr-3"></i>
-                        <div>
-                            <p class="font-semibold">全球市场概览</p>
-                            <p class="text-sm">美股收跌 · A股震荡上行 · 港股微涨</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+<body>
+<div class="container">
+    <!-- 头部 -->
+    <div class="header">
+        <h1>📊 每日股市消息汇总</h1>
+        <div class="update-time">数据更新时间：2026-08-07 15:06（北京时间）</div>
+    </div>
 
-    <!-- 主要内容区域 -->
-    <main class="container mx-auto max-w-7xl px-4 py-8">
-        
-        <!-- 第一部分：当前全球市场表现 -->
-        <section class="mb-12 bg-white rounded-2xl shadow-lg p-6 md:p-8">
-            <div class="flex items-center mb-6">
-                <div class="bg-blue-100 p-3 rounded-full mr-4">
-                    <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">第一部分：当前全球市场表现</h2>
+    <!-- 第一部分：全球市场表现 -->
+    <div class="section">
+        <div class="section-title"><span class="section-num">1</span>全球市场表现</div>
+        <div class="market-grid">
+            <div class="market-card">
+                <div><div class="name">🇺🇸 道琼斯工业</div><div class="value">53,885.10</div></div>
+                <div class="change down">-0.85%</div>
             </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <!-- 美股表现 -->
-                <div class="bg-blue-50 rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-flag-usa text-blue-600 text-xl mr-3"></i>
-                        <h3 class="text-xl font-bold text-gray-800">美股凌晨收盘指数</h3>
-                        <span class="ml-auto text-sm text-gray-500">北京时间8月7日凌晨</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">美国三大股指集体收跌，终结此前连涨态势。市场受科技股财报不及预期影响，出现明显回调。</p>
-                    
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center p-3 bg-white rounded-lg">
-                            <div>
-                                <p class="font-semibold">道琼斯工业平均指数</p>
-                                <p class="text-sm text-gray-500">收盘点位</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xl font-bold">53,885.10</p>
-                                <p class="text-red-600 font-semibold">-0.85% (-464.02)</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-white rounded-lg">
-                            <div>
-                                <p class="font-semibold">纳斯达克综合指数</p>
-                                <p class="text-sm text-gray-500">收盘点位</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xl font-bold">26,348.35</p>
-                                <p class="text-red-600 font-semibold">-0.06% (-15.09)</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-white rounded-lg">
-                            <div>
-                                <p class="font-semibold">标普500指数</p>
-                                <p class="text-sm text-gray-500">收盘点位</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xl font-bold">7,709.96</p>
-                                <p class="text-red-600 font-semibold">-0.18% (-13.59)</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 text-sm text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        数据来源：<sup>[1],[2],[3],[4]</sup>
-                    </div>
-                </div>
-                
-                <!-- A股表现 -->
-                <div class="bg-green-50 rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-chart-bar text-green-600 text-xl mr-3"></i>
-                        <h3 class="text-xl font-bold text-gray-800">A股实时指数</h3>
-                        <span class="ml-auto text-sm text-gray-500">2026年8月7日盘中</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">A股市场全天呈现震荡上行格局，早盘小幅调整后逐步走高，创业板指领涨。</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                                <span class="font-medium">上证指数</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-lg font-bold">3,928.54点</span>
-                                <span class="text-green-600 font-semibold ml-2">+0.72%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                                <span class="font-medium">深证成指</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-lg font-bold">14,313.03点</span>
-                                <span class="text-green-600 font-semibold ml-2">+1.44%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                                <span class="font-medium">创业板指</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-lg font-bold">3,573.90点</span>
-                                <span class="text-green-600 font-semibold ml-2">+1.66%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 p-3 bg-white rounded-lg">
-                        <div class="flex justify-between">
-                            <div>
-                                <p class="font-semibold">市场成交额</p>
-                                <p class="text-2xl font-bold text-blue-600">2.15万亿元</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm text-gray-500">沪市成交</p>
-                                <p class="font-semibold">9,783亿元</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 text-sm text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        数据来源：<sup>[5],[6],[7],[8],[9]</sup>
-                    </div>
-                </div>
+            <div class="market-card">
+                <div><div class="name">🇺🇸 标普500</div><div class="value">7,709.96</div></div>
+                <div class="change down">-0.18%</div>
             </div>
-            
-            <!-- 港股、日经、韩指表现 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 港股 -->
-                <div class="bg-purple-50 rounded-xl p-5 custom-card-hover">
-                    <div class="flex items-center mb-3">
-                        <i class="fas fa-building text-purple-600 mr-2"></i>
-                        <h4 class="font-bold text-gray-800">港股实时指数</h4>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">恒生指数</span>
-                            <span class="font-semibold">25,567.85点 <span class="text-green-600">+0.15%</span></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">恒生科技指数</span>
-                            <span class="font-semibold">4,837.08点 <span class="text-green-600">+0.34%</span></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">国企指数</span>
-                            <span class="font-semibold">8,503.78点 <span class="text-green-600">+0.06%</span></span>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-xs text-gray-500">
-                        数据来源：<sup>[10],[11],[12],[13],[14]</sup>
-                    </div>
-                </div>
-                
-                <!-- 日经 -->
-                <div class="bg-red-50 rounded-xl p-5 custom-card-hover">
-                    <div class="flex items-center mb-3">
-                        <i class="fas fa-yen-sign text-red-600 mr-2"></i>
-                        <h4 class="font-bold text-gray-800">日经225指数</h4>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">开盘</span>
-                            <span class="font-semibold">65,746.13点 <span class="text-green-600">+0.1%</span></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">盘中低点</span>
-                            <span class="font-semibold">64,979.31点 <span class="text-red-600">-1%</span></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">实时报价</span>
-                            <span class="font-semibold">约65,400点 <span class="text-red-600">-0.5%</span></span>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-xs text-gray-500">
-                        数据来源：<sup>[15],[16],[17],[18],[19],[20],[21],[22]</sup>
-                    </div>
-                </div>
-                
-                <!-- 韩指 -->
-                <div class="bg-orange-50 rounded-xl p-5 custom-card-hover">
-                    <div class="flex items-center mb-3">
-                        <i class="fas fa-won-sign text-orange-600 mr-2"></i>
-                        <h4 class="font-bold text-gray-800">韩国KOSPI指数</h4>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">开盘</span>
-                            <span class="font-semibold">6,365.07点 <span class="text-green-600">+1.1%</span></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">盘中高点</span>
-                            <span class="font-semibold">6,415.60点</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">盘中低点</span>
-                            <span class="font-semibold">6,292.93点 <span class="text-red-600">-0.05%</span></span>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-xs text-gray-500">
-                        数据来源：<sup>[15],[16],[18],[19],[22],[23]</sup>
-                    </div>
-                </div>
+            <div class="market-card">
+                <div><div class="name">🇺🇸 纳斯达克</div><div class="value">26,348.35</div></div>
+                <div class="change down">-0.06%</div>
             </div>
-        </section>
-        
-        <!-- 第二部分：板块利空利好分析 -->
-        <section class="mb-12 bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl shadow-lg p-6 md:p-8">
-            <div class="flex items-center mb-6">
-                <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                    <i class="fas fa-balance-scale text-indigo-600 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">第二部分：板块利空与利好分析</h2>
+            <div class="market-card">
+                <div><div class="name">🇨🇳 上证指数</div><div class="value">≈3,940</div></div>
+                <div class="change up">+1.02%</div>
             </div>
-            
-            <!-- 板块切换导航 -->
-            <div class="mb-8">
-                <div class="flex flex-wrap gap-2 mb-6" id="sectorTabs">
-                    <button class="sector-tab-btn active px-4 py-2 rounded-lg bg-blue-600 text-white font-medium" data-sector="tech">科技板块</button>
-                    <button class="sector-tab-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300" data-sector="industrial">工业有色</button>
-                    <button class="sector-tab-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300" data-sector="robot">机器人</button>
-                    <button class="sector-tab-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300" data-sector="grid">电网设备</button>
-                    <button class="sector-tab-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300" data-sector="gold">黄金及黄金股票</button>
-                </div>
-                
-                <!-- 科技板块内容 -->
-                <div id="tech-sector" class="sector-content active">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- 利好因素 -->
-                        <div class="bg-green-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-green-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-up text-green-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利好因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">1. AI应用端利好堆积</h4>
-                                    <ul class="text-gray-700 space-y-1 text-sm">
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>DeepSeek重启融资，拟以740亿美元估值筹集80亿美元<sup>[24]</sup></span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>字节跳动讨论训练超5万亿参数模型<sup>[24]</sup></span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>阿里新一代视频生成模型Wan3.0开启公测<sup>[24]</sup></span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>高盛指出中国AI模型需求旺盛、算力趋紧<sup>[24]</sup></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">2. 政策支持强化国产替代</h4>
-                                    <ul class="text-gray-700 space-y-1 text-sm">
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>工信部要求新建智算中心国产AI芯片采购占比不低于75%<sup>[25]</sup></span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>新版《集成电路布图设计保护条例》将施行<sup>[26],[27]</sup></span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>央行扩容科技创新再贷款至1.2万亿元<sup>[27]</sup></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">3. 存储芯片涨价趋势延续</h4>
-                                    <p class="text-gray-700 text-sm">全球DRAM合约价一季度环比上涨90%-95%，NAND涨幅近60%<sup>[26]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 利空因素 -->
-                        <div class="bg-red-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-red-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-down text-red-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利空因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">1. 美股科技股财报不及预期</h4>
-                                    <p class="text-gray-700 text-sm">闪迪公布下一财季营收指引为103亿至108亿美元，低于市场预期，股价盘中跌超12%<sup>[24]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">2. 特朗普加征多晶硅关税</h4>
-                                    <p class="text-gray-700 text-sm">特朗普宣布对多晶硅及其衍生产品加征关税，对光伏组件、设备及多晶硅出口形成短期压力<sup>[24],[30]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 工业有色板块内容 -->
-                <div id="industrial-sector" class="sector-content hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- 利好因素 -->
-                        <div class="bg-green-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-green-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-up text-green-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利好因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">1. 刚果（金）禁止铜钴精矿出口推升金属价格</h4>
-                                    <p class="text-gray-700 text-sm mb-2">刚果（金）于8月6日发布行政指令，即刻禁止铜精矿与钴精矿出口<sup>[31],[32],[33]</sup></p>
-                                    <p class="text-gray-700 text-sm">中证工业有色金属主题指数(H11059)上涨3.00%<sup>[31]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">2. 铝锡等金属受供需支撑走强</h4>
-                                    <p class="text-gray-700 text-sm">铝库存处于历史低位，光伏与新能源车需求支撑加工端<sup>[31]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">3. 铅锌价格上涨带动板块异动</h4>
-                                    <p class="text-gray-700 text-sm">截至8月6日，锌现货价格达25,670.00元/吨，近一周上涨3.51%<sup>[34]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 利空因素 -->
-                        <div class="bg-gray-100 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-gray-200 p-2 rounded-full mr-3">
-                                    <i class="fas fa-minus text-gray-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利空因素</h3>
-                            </div>
-                            <div class="bg-white rounded-lg p-6 text-center">
-                                <i class="fas fa-info-circle text-3xl text-gray-400 mb-3"></i>
-                                <p class="text-gray-600">搜索结果中未提及工业有色板块当日存在直接利空因素<sup>[31],[32],[34]</sup></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 机器人板块内容 -->
-                <div id="robot-sector" class="sector-content hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- 利好因素 -->
-                        <div class="bg-green-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-green-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-up text-green-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利好因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">1. 宇树科技IPO定价落地引爆产业链</h4>
-                                    <p class="text-gray-700 text-sm mb-2">宇树科技确定科创板发行价为150.80元/股，对应市值约609.93亿元<sup>[36],[37]</sup></p>
-                                    <p class="text-gray-700 text-sm">被称为"A股人形机器人第一股"<sup>[38],[37]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">2. 重大产业活动密集催化</h4>
-                                    <ul class="text-gray-700 space-y-1 text-sm">
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>2026世界机器人大会将于8月19日至23日在北京举行<sup>[39],[40]</sup></span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span>比亚迪首款人形机器人计划于8月发布<sup>[40]</sup></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">3. 特斯拉确认Optimus量产目标</h4>
-                                    <p class="text-gray-700 text-sm">特斯拉在二季度财报电话会中再次确认年底实现Optimus人形机器人量产目标<sup>[41]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 利空因素 -->
-                        <div class="bg-gray-100 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-gray-200 p-2 rounded-full mr-3">
-                                    <i class="fas fa-minus text-gray-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利空因素</h3>
-                            </div>
-                            <div class="bg-white rounded-lg p-6 text-center">
-                                <i class="fas fa-info-circle text-3xl text-gray-400 mb-3"></i>
-                                <p class="text-gray-600">搜索结果中未提及机器人板块当日存在直接利空因素<sup>[39],[45],[38]</sup></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 电网设备板块内容 -->
-                <div id="grid-sector" class="sector-content hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- 利好因素 -->
-                        <div class="bg-green-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-green-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-up text-green-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利好因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">1. 特高压招标规模超去年全年</h4>
-                                    <p class="text-gray-700 text-sm">国家电网公布2026年第三批特高压及输变电设备招标结果，合计中标金额约71.92亿元<sup>[47],[48]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">2. "十五五"新型电力系统规划落地</h4>
-                                    <p class="text-gray-700 text-sm">国内新型电网投资预计超过5万亿元<sup>[47],[48]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">3. AI算力扩张倒逼电网升级</h4>
-                                    <p class="text-gray-700 text-sm">美国PJM拟出台新规，对未拍得足够电力的数据中心实施强制切电<sup>[51],[52]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 利空因素 -->
-                        <div class="bg-red-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-red-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-down text-red-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利空因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">1. 部分企业业绩下滑</h4>
-                                    <p class="text-gray-700 text-sm">三星电气预计上半年净利润同比下降51%至64%<sup>[53],[54]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">2. 汇率波动与地缘政治影响</h4>
-                                    <p class="text-gray-700 text-sm">部分企业受汇率波动影响出现汇兑损失<sup>[53],[54]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 黄金板块内容 -->
-                <div id="gold-sector" class="sector-content hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- 利好因素 -->
-                        <div class="bg-green-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-green-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-up text-green-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利好因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">1. 国际金价强势反弹</h4>
-                                    <p class="text-gray-700 text-sm">现货黄金盘中一度突破4,300美元/盎司，本周累计涨幅约4.8%至5%<sup>[56],[57],[58]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">2. 美国就业数据疲软，加息预期降温</h4>
-                                    <p class="text-gray-700 text-sm">7月ADP新增就业仅4.4万人，远低于预期7万人<sup>[56],[57],[58]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-green-700 mb-2">3. 全球央行购金创历史新高</h4>
-                                    <p class="text-gray-700 text-sm">2026年二季度全球央行净买入黄金288.9吨，同比增长62%<sup>[56],[59],[60]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 利空因素 -->
-                        <div class="bg-red-50 rounded-xl p-6 custom-card-hover">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-red-100 p-2 rounded-full mr-3">
-                                    <i class="fas fa-thumbs-down text-red-600"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800">利空因素</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">1. 美联储鹰派立场未根本扭转</h4>
-                                    <p class="text-gray-700 text-sm">广发期货指出，美联储口头保持鹰派，美债收益率回升<sup>[67]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">2. 部分机构对三季度持悲观看法</h4>
-                                    <p class="text-gray-700 text-sm">鹏元资信认为，三季度将是全年黄金市场压力最大阶段<sup>[63]</sup></p>
-                                </div>
-                                
-                                <div class="bg-white rounded-lg p-4">
-                                    <h4 class="font-bold text-red-700 mb-2">3. 国内黄金ETF增仓量同比下降</h4>
-                                    <p class="text-gray-700 text-sm">2026年上半年国内黄金ETF增仓量为28.677吨，较2025年上半年下降66.17%<sup>[61],[68]</sup></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="market-card">
+                <div><div class="name">🇨🇳 深证成指</div><div class="value">≈14,310</div></div>
+                <div class="change up">+1.42%</div>
             </div>
-        </section>
-        
-        <!-- 第三部分：A股走势预判 -->
-        <section class="mb-12 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-lg p-6 md:p-8">
-            <div class="flex items-center mb-6">
-                <div class="bg-amber-100 p-3 rounded-full mr-4">
-                    <i class="fas fa-crystal-ball text-amber-600 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">第三部分：当日A股走势预判</h2>
+            <div class="market-card">
+                <div><div class="name">🇨🇳 创业板指</div><div class="value">≈3,563</div></div>
+                <div class="change up">+1.35%</div>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 科技板块预判 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-microchip text-blue-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">科技板块</h3>
-                    </div>
-                    <div class="mb-3">
-                        <span class="custom-badge bg-blue-100 text-blue-800">震荡分化</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">中证1000指数估值已回落至历史相对低位，在大盘科技主线交易拥挤后，资金存在向小盘科技扩散的动力<sup>[69]</sup>。</p>
-                    <p class="text-gray-700 text-sm">趋势性反弹的关键窗口在8月下旬，取决于中报业绩、海外科技龙头财报<sup>[70]</sup>。</p>
-                    <div class="mt-4 text-xs text-gray-500">
-                        来源：<sup>[69],[70],[72]</sup>
-                    </div>
-                </div>
-                
-                <!-- 工业有色预判 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-green-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-industry text-green-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">工业有色</h3>
-                    </div>
-                    <div class="mb-3">
-                        <span class="custom-badge bg-green-100 text-green-800">供给扰动+降息预期</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">工业金属在降息预期与供给收紧下震荡走强<sup>[73]</sup>。</p>
-                    <p class="text-gray-700 text-sm">多重利好推动铜价再度冲击14,000美元/吨，年内铜价有望冲击15,000美元/吨<sup>[73]</sup>。</p>
-                    <div class="mt-4 text-xs text-gray-500">
-                        来源：<sup>[73]</sup>
-                    </div>
-                </div>
-                
-                <!-- 机器人预判 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-purple-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-robot text-purple-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">机器人</h3>
-                    </div>
-                    <div class="mb-3">
-                        <span class="custom-badge bg-purple-100 text-purple-800">催化密集</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">特斯拉再次确认Optimus年底量产目标；宇树科技启动科创板IPO<sup>[41]</sup>。</p>
-                    <p class="text-gray-700 text-sm">行业已进入规模化落地关键窗口期<sup>[41]</sup>。</p>
-                    <div class="mt-4 text-xs text-gray-500">
-                        来源：<sup>[40],[41],[44]</sup>
-                    </div>
-                </div>
-                
-                <!-- 电网设备预判 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-red-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-bolt text-red-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">电网设备</h3>
-                    </div>
-                    <div class="mb-3">
-                        <span class="custom-badge bg-red-100 text-red-800">投资确定性强</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">特高压招标规模超去年全年，配网集采价格触底修复<sup>[47]</sup>。</p>
-                    <p class="text-gray-700 text-sm">"十五五"期间新型电网拟投资超5万亿元，较"十四五"大幅增长<sup>[54]</sup>。</p>
-                    <div class="mt-4 text-xs text-gray-500">
-                        来源：<sup>[47],[50],[54]</sup>
-                    </div>
-                </div>
-                
-                <!-- 黄金预判 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-yellow-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-gem text-yellow-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">黄金及黄金股票</h3>
-                    </div>
-                    <div class="mb-3">
-                        <span class="custom-badge bg-yellow-100 text-yellow-800">宏观预期反转</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">黄金仍处于2015年开启的大牛市中，4000美元/盎司附近是底部区域<sup>[63]</sup>。</p>
-                    <p class="text-gray-700 text-sm">全球央行购金成为重要支撑，2026年二季度全球央行净买入黄金288.9吨<sup>[56],[59]</sup>。</p>
-                    <div class="mt-4 text-xs text-gray-500">
-                        来源：<sup>[56],[59],[63]</sup>
-                    </div>
-                </div>
-                
-                <!-- 综合预判 -->
-                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-indigo-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-chart-pie text-indigo-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">综合观点</h3>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">8月A股把握脉冲式修复行情，扰动因素逐步消退<sup>[75]</sup>。</p>
-                    <p class="text-gray-700 text-sm">A股放量反弹，机构建议八月围绕修复与景气方向布局<sup>[76]</sup>。</p>
-                    <div class="mt-4 text-xs text-gray-500">
-                        来源：<sup>[75],[76]</sup>
-                    </div>
-                </div>
+            <div class="market-card">
+                <div><div class="name">🇭🇰 恒生指数</div><div class="value">25,530.28</div></div>
+                <div class="change down">-1.49%</div>
             </div>
-        </section>
-        
-        <!-- 第四部分：关注方向建议 -->
-        <section class="mb-12 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-lg p-6 md:p-8">
-            <div class="flex items-center mb-6">
-                <div class="bg-emerald-100 p-3 rounded-full mr-4">
-                    <i class="fas fa-binoculars text-emerald-600 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">第四部分：建议关注方向</h2>
+            <div class="market-card">
+                <div><div class="name">🇭🇰 恒生科技</div><div class="value">--</div></div>
+                <div class="change down">-2.28%</div>
             </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- 证券公司推荐 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-blue-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-university text-blue-600"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800">证券公司推荐关注方向</h3>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="border-l-4 border-blue-500 pl-4 py-2">
-                            <h4 class="font-bold text-blue-700 mb-1">科技成长修复</h4>
-                            <p class="text-gray-700 text-sm">AI算力与半导体硬件，关注光模块、先进封装、半导体设备等领域<sup>[74],[75],[76]</sup></p>
-                        </div>
-                        
-                        <div class="border-l-4 border-green-500 pl-4 py-2">
-                            <h4 class="font-bold text-green-700 mb-1">周期与资源品</h4>
-                            <p class="text-gray-700 text-sm">煤炭、有色金属、基础化工与能源化工<sup>[77],[79],[80],[81],[82]</sup></p>
-                        </div>
-                        
-                        <div class="border-l-4 border-purple-500 pl-4 py-2">
-                            <h4 class="font-bold text-purple-700 mb-1">非银金融与红利资产</h4>
-                            <p class="text-gray-700 text-sm">证券行业、非银金融整体、高股息红利资产<sup>[77],[81],[83],[84]</sup></p>
-                        </div>
-                        
-                        <div class="border-l-4 border-pink-500 pl-4 py-2">
-                            <h4 class="font-bold text-pink-700 mb-1">创新药与消费</h4>
-                            <p class="text-gray-700 text-sm">创新药/CXO、食品饮料<sup>[74],[77],[81],[85]</sup></p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                        <h4 class="font-bold text-blue-800 mb-2">8月金股集中推荐方向</h4>
-                        <div class="grid grid-cols-2 gap-3 text-sm">
-                            <div>
-                                <p class="font-semibold text-gray-700">电子 (38只)</p>
-                                <p class="text-gray-600">中芯国际、北方华创等</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-700">医药生物 (20只)</p>
-                                <p class="text-gray-600">药明康德、恒瑞医药等</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-700">机械设备 (17只)</p>
-                                <p class="text-gray-600">杰瑞股份、杭叉集团等</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-700">食品饮料 (15只)</p>
-                                <p class="text-gray-600">美的集团、伊利股份等</p>
-                            </div>
-                        </div>
-                        <div class="mt-3 text-xs text-gray-600">
-                            至少被3家以上券商共同推荐的金股共19只，宁德时代被9家券商推荐<sup>[74]</sup>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 国家政策建议 -->
-                <div class="bg-white rounded-xl p-6 custom-card-hover">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-green-100 p-2 rounded-lg mr-3">
-                            <i class="fas fa-landmark text-green-600"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800">国家政策建议关注方向</h3>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <div class="bg-green-100 p-2 rounded-lg mr-3 mt-1">
-                                <i class="fas fa-bolt text-green-600 text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">新型基础设施建设："六张网"规划建设</h4>
-                                <p class="text-gray-700 text-sm">水网、新型电网、算力网、新一代通信网、城市地下管网、物流网。预计2026年投资规模将突破7万亿元<sup>[86],[87]</sup></p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-lg mr-3 mt-1">
-                                <i class="fas fa-solar-panel text-blue-600 text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">新能源与绿色低碳产业</h4>
-                                <p class="text-gray-700 text-sm">风光大基地、分布式光伏、深远海风电等新能源产业链；抽水蓄能、电网侧独立长时储能等<sup>[92],[93],[94]</sup></p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-purple-100 p-2 rounded-lg mr-3 mt-1">
-                                <i class="fas fa-brain text-purple-600 text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">人工智能与智能终端</h4>
-                                <p class="text-gray-700 text-sm">增加人工智能手机和电脑、智能穿戴、智能机器人等新一代智能终端产品供给<sup>[95],[86],[25]</sup></p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-yellow-100 p-2 rounded-lg mr-3 mt-1">
-                                <i class="fas fa-helicopter text-yellow-600 text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">低空经济</h4>
-                                <p class="text-gray-700 text-sm">支持低空起降设施建设、低空智能网联平台搭建<sup>[96],[25]</sup></p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-red-100 p-2 rounded-lg mr-3 mt-1">
-                                <i class="fas fa-industry text-red-600 text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 mb-1">现代化产业体系培育</h4>
-                                <p class="text-gray-700 text-sm">人形机器人与具身智能技术、原子级制造技术、生物制造高性能分离纯化装备等<sup>[97],[92]</sup></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6 p-4 bg-green-50 rounded-lg">
-                        <h4 class="font-bold text-green-800 mb-2">扩大有效投资的重点工程项目</h4>
-                        <p class="text-gray-700 text-sm">加快"两重"建设（重大战略、重大工程）；加快8000亿元新型政策性金融工具资金投放使用；2026年新增专项债额度为4.4万亿元<sup>[88],[89],[86]</sup></p>
-                    </div>
-                </div>
+            <div class="market-card">
+                <div><div class="name">🇯🇵 日经225</div><div class="value">65,606.71</div></div>
+                <div class="change down">-0.12%</div>
             </div>
-        </section>
-        
-        <!-- 第五部分：场外基金推荐 -->
-        <section class="mb-12 bg-gradient-to-br from-violet-50 to-indigo-50 rounded-2xl shadow-lg p-6 md:p-8">
-            <div class="flex items-center mb-6">
-                <div class="bg-violet-100 p-3 rounded-full mr-4">
-                    <i class="fas fa-chart-area text-violet-600 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">第五部分：建议关注的场外基金</h2>
-                <span class="ml-auto text-sm bg-violet-100 text-violet-800 px-3 py-1 rounded-full">非A类和ETF联接C类</span>
-            </div>
-            
-            <div class="overflow-x-auto mb-8">
-                <table class="min-w-full divide-y divide-gray-200 custom-fund-table">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">基金名称</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">基金代码</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">类型</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">当前状态</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">推荐理由</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">华泰柏瑞中证红利低波ETF联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">007467</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已开放</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">近期资金净流入显著，融资净买入居同类首位<sup>[100],[101],[102]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">港股通红利ETF华泰柏瑞联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">018388</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">QDII ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已开放</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">无申购费，适合短期定投或中短期持有<sup>[103]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">成长ETF易方达场外联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">027859.OF</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">可申购</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">场外C类份额，无申购费，适合定投布局中盘成长<sup>[104]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">芯片ETF易方达场外联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">018412.OF</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">可申购</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">C类无申购费，适合分批定投参与半导体反弹<sup>[105]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">南方有色金属ETF联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">004433</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已开放</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">百亿规模和高流动性优势，适合有色金属板块波段操作<sup>[109],[110],[111]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">广发半导体设备ETF联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">020640</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已开放</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">AI后市主线聚焦半导体设备，推荐该基金一键布局硬核红利<sup>[112]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">富国中证科创创业50ETF联接C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">013314</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已开放</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">近一年涨幅达79.14%<sup>[115]</sup></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900">易方达中证芯片产业ETF联接发起式C</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">018412</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">ETF联接</td>
-                            <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已开放</span></td>
-                            <td class="px-4 py-3 text-sm text-gray-700">近一年收益率73.54%，管理费率0.15%/年<sup>[118]</sup></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- 基金绩效对比 -->
-            <div class="bg-white rounded-xl p-6 custom-card-hover">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">基金绩效与费率对比</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">基金简称</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">近一年收益率</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">基金规模(亿元)</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">管理费(年)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">大成深证成长40ETF联接C</td>
-                                <td class="px-4 py-3 text-sm font-bold text-green-600">125.61%</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">3.68</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">0.50%</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">富国中证科创创业50ETF联接C</td>
-                                <td class="px-4 py-3 text-sm font-bold text-green-600">79.14%</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">4.14</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">未提供</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">易方达中证芯片产业ETF联接发起式C</td>
-                                <td class="px-4 py-3 text-sm font-bold text-green-600">73.54%</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">8.29</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">0.15%</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">广发国证半导体芯片ETF联接C</td>
-                                <td class="px-4 py-3 text-sm font-bold text-green-600">67.41%</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">33.71</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">未提供</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">易方达科创板50ETF联接C</td>
-                                <td class="px-4 py-3 text-sm font-bold text-green-600">58.75%</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">227.66</td>
-                                <td class="px-4 py-3 text-sm text-gray-700">未提供</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-4 text-xs text-gray-500">
-                    数据来源：<sup>[115],[118],[119],[120],[122]</sup>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <!-- 页脚 -->
-    <footer class="bg-gray-900 text-gray-300 py-8 px-4">
-        <div class="container mx-auto max-w-7xl">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <h3 class="text-xl font-bold text-white mb-2">2026年8月7日股市消息汇总报告</h3>
-                    <p class="text-gray-400">数据更新时间：2026-08-07 14:30</p>
-                </div>
-                <div class="text-center md:text-right">
-                    <div class="bg-red-900/30 border border-red-800 rounded-lg p-4 max-w-md">
-                        <h4 class="font-bold text-white mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>重要免责声明</h4>
-                        <p class="text-sm">本内容由AI生成，可能存在错误或不准确之处。请在使用前自行核实信息的准确性。投资有风险，决策需谨慎。</p>
-                    </div>
-                    <div class="mt-4 text-xs text-gray-500">
-                        <p>本报告基于公开资料整理，仅供参考，不构成任何投资建议。</p>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-8 pt-6 border-t border-gray-800 text-center text-sm text-gray-500">
-                <p>© 2026 股市消息汇总报告 · 所有数据来源于公开市场信息</p>
+            <div class="market-card">
+                <div><div class="name">🇰🇷 韩国KOSPI</div><div class="value">6,258.77</div></div>
+                <div class="change down">-0.60%</div>
             </div>
         </div>
-    </footer>
-    
-    <script>
-        // 板块切换功能
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.sector-tab-btn');
-            const sectorContents = document.querySelectorAll('.sector-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const sector = this.getAttribute('data-sector');
-                    
-                    // 更新按钮状态
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('active', 'bg-blue-600', 'text-white');
-                        btn.classList.add('bg-gray-200', 'text-gray-800');
-                    });
-                    this.classList.add('active', 'bg-blue-600', 'text-white');
-                    this.classList.remove('bg-gray-200', 'text-gray-800');
-                    
-                    // 显示对应内容
-                    sectorContents.forEach(content => {
-                        content.classList.add('hidden');
-                        content.classList.remove('active');
-                    });
-                    
-                    const targetContent = document.getElementById(`${sector}-sector`);
-                    if (targetContent) {
-                        targetContent.classList.remove('hidden');
-                        targetContent.classList.add('active');
-                    }
-                });
-            });
-            
-            // 初始化图表
-            initMarketChart();
-        });
+        <div style="margin-top:12px;font-size:12px;color:#888;">
+            📌 美股8月6日收盘 | A股/港股/日韩8月7日收盘 | 两市成交约2.66万亿元，放量1356亿<br>
+            📌 韩国KOSPI本周跌超5%，连续第七周下跌，创2022年12月以来最长连跌纪录<br>
+            📌 现货黄金日内冲高至4347美元/盎司，涨1.12%；前日曾触及4304美元阶段新高
+        </div>
+    </div>
+
+    <!-- 第二部分：板块利好利空 -->
+    <div class="section">
+        <div class="section-title"><span class="section-num">2</span>重点板块利好 / 利空梳理</div>
+        <table class="sector-table">
+            <thead>
+                <tr><th style="width:80px;">板块</th><th>利好因素</th><th>利空因素</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>科技</strong></td>
+                    <td>
+                        <span class="tag tag-bull">利好</span>英伟达CPO全面量产，板块获资金追捧<br>
+                        <span class="tag tag-bull">利好</span>SpaceX全线AI卫星搭载英伟达GPU<br>
+                        <span class="tag tag-bull">利好</span>Grok 4.6今日发布，多模态突破预期<br>
+                        <span class="tag tag-bull">利好</span>招商证券：科技调整基本告一段落
+                    </td>
+                    <td>
+                        <span class="tag tag-bear">利空</span>美国拟禁止进口中国光模块<br>
+                        <span class="tag tag-bear">利空</span>存储芯片景气争议，A股芯片指数年内高点回撤24%<br>
+                        <span class="tag tag-bear">利空</span>商务部公布对美反制清单，贸易摩擦升级
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>工业有色</strong></td>
+                    <td>
+                        <span class="tag tag-bull">利好</span>刚果(金)限制铜钴精矿出口，供给收紧<br>
+                        <span class="tag tag-bull">利好</span>美国限制钨废料出口，战略金属涨价预期<br>
+                        <span class="tag tag-bull">利好</span>ADP数据不及预期，降息利好大宗商品
+                    </td>
+                    <td>
+                        <span class="tag tag-bear">利空</span>全球贸易摩擦不确定性<br>
+                        <span class="tag tag-bear">利空</span>短期涨幅较大，获利回吐压力
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>机器人</strong></td>
+                    <td>
+                        <span class="tag tag-bull">利好</span>宇树科技8月5日科创板上市，情绪催化<br>
+                        <span class="tag tag-bull">利好</span>8月世界机器人大会即将召开<br>
+                        <span class="tag tag-bull">利好</span>工信部：2026年人形机器人产量有望突破10万台<br>
+                        <span class="tag tag-bull">利好</span>今日盘面人形机器人概念走强
+                    </td>
+                    <td>
+                        <span class="tag tag-bear">利空</span>前期涨幅较大，短线资金兑现<br>
+                        <span class="tag tag-bear">利空</span>商业化落地仍需时间验证
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>电网设备</strong></td>
+                    <td>
+                        <span class="tag tag-bull">利好</span>政治局会议定调"六张网"新基建<br>
+                        <span class="tag tag-bull">利好</span>电网投资内外景气共振，Q1投资高增<br>
+                        <span class="tag tag-bull">利好</span>全年最强政策赛道，订单能见度高
+                    </td>
+                    <td>
+                        <span class="tag tag-bear">利空</span>短期估值偏高，部分标的涨幅已大<br>
+                        <span class="tag tag-bear">利空</span>今日盘面水利水电题材分化
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>黄金</strong></td>
+                    <td>
+                        <span class="tag tag-bull">利好</span>ADP就业大幅不及预期，降息预期升温<br>
+                        <span class="tag tag-bull">利好</span>全球央行Q2购金288.9吨，同比+62%<br>
+                        <span class="tag tag-bull">利好</span>伊朗霍尔木兹海峡局势紧张<br>
+                        <span class="tag tag-bull">利好</span>近三日金价累计涨超5%，趋势明确
+                    </td>
+                    <td>
+                        <span class="tag tag-bear">利空</span>4300美元关口试探失败，短线获利盘抛压<br>
+                        <span class="tag tag-bear">利空</span>美元指数回升至99.95<br>
+                        <span class="tag tag-bear">利空</span>今晚非农数据或引发波动
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>黄金股票</strong></td>
+                    <td>
+                        <span class="tag tag-bull">利好</span>金价维持4200+高位，矿企利润丰厚<br>
+                        <span class="tag tag-bull">利好</span>降息周期利好贵金属板块估值修复
+                    </td>
+                    <td>
+                        <span class="tag tag-bear">利空</span>今日A股黄金概念早盘走弱<br>
+                        <span class="tag tag-bear">利空</span>连续暴涨后技术性回调需求<br>
+                        <span class="tag tag-bear">利空</span>短线资金集中兑现
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 第三部分：A股走势预判 -->
+    <div class="section">
+        <div class="section-title"><span class="section-num">3</span>今日A股走势复盘与短期预判</div>
+        <div style="margin-bottom:16px;padding:12px;background:rgba(255,215,0,0.06);border-radius:10px;font-size:13px;line-height:1.8;">
+            <strong style="color:#ffd700;">📋 今日盘面总结：</strong>A股低开高走，三大指数集体收涨。早盘出现极端结构性分化（指数红盘、近八成个股下跌），午后资金完成再分配，硬科技板块放量跳水后资金向中小盘扩散，最终创业板指涨1.35%，全市场2856只上涨。成交额2.66万亿，放量明显。
+        </div>
         
-        // 初始化市场表现图表
-        function initMarketChart() {
-            const chartDom = document.createElement('div');
-            chartDom.className = 'custom-chart-container mt-8';
-            chartDom.id = 'marketChart';
-            
-            // 插入到第一部分后面
-            const firstSection = document.querySelector('section');
-            firstSection.appendChild(chartDom);
-            
-            // 确保DOM已渲染
-            setTimeout(() => {
-                const chart = echarts.init(document.getElementById('marketChart'));
-                
-                const option = {
-                    title: {
-                        text: '全球主要股指涨跌幅对比',
-                        left: 'center',
-                        textStyle: {
-                            fontSize: 16,
-                            fontWeight: 'bold'
-                        }
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow'
-                        },
-                        formatter: function(params) {
-                            let result = params[0].name + '<br/>';
-                            params.forEach(param => {
-                                const color = param.value >= 0 ? '#10b981' : '#ef4444';
-                                const symbol = param.value >= 0 ? '↑' : '↓';
-                                result += `<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;background-color:${param.color}"></span>`;
-                                result += `${param.seriesName}: <span style="color:${color};font-weight:bold">${symbol}${Math.abs(param.value)}%</span><br/>`;
-                            });
-                            return result;
-                        }
-                    },
-                    legend: {
-                        data: ['涨跌幅'],
-                        top: 30
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        top: '20%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: ['道琼斯', '纳斯达克', '标普500', '上证指数', '深证成指', '创业板指', '恒生指数', '恒生科技', '日经225', '韩国KOSPI'],
-                        axisLabel: {
-                            rotate: 45
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        name: '涨跌幅(%)',
-                        axisLabel: {
-                            formatter: '{value}%'
-                        }
-                    },
-                    series: [
-                        {
-                            name: '涨跌幅',
-                            type: 'bar',
-                            data: [
-                                {value: -0.85, itemStyle: {color: '#ef4444'}},
-                                {value: -0.06, itemStyle: {color: '#ef4444'}},
-                                {value: -0.18, itemStyle: {color: '#ef4444'}},
-                                {value: 0.72, itemStyle: {color: '#10b981'}},
-                                {value: 1.44, itemStyle: {color: '#10b981'}},
-                                {value: 1.66, itemStyle: {color: '#10b981'}},
-                                {value: 0.15, itemStyle: {color: '#10b981'}},
-                                {value: 0.34, itemStyle: {color: '#10b981'}},
-                                {value: -0.5, itemStyle: {color: '#ef4444'}},
-                                {value: -0.05, itemStyle: {color: '#ef4444'}}
-                            ],
-                            label: {
-                                show: true,
-                                position: 'top',
-                                formatter: function(params) {
-                                    const value = params.value;
-                                    const color = value >= 0 ? '#10b981' : '#ef4444';
-                                    const symbol = value >= 0 ? '+' : '';
-                                    return `${symbol}${value}%`;
-                                },
-                                color: function(params) {
-                                    return params.value >= 0 ? '#10b981' : '#ef4444';
-                                }
-                            }
-                        }
-                    ]
-                };
-                
-                chart.setOption(option);
-                
-                // 响应式调整
-                window.addEventListener('resize', function() {
-                    chart.resize();
-                });
-            }, 100);
-        }
+        <div class="predict-item">
+            <div class="sector-name">🔬 科技（半导体/CPO/AI）</div>
+            <div class="detail">短期判断：<span class="highlight">震荡分化，高位博弈加剧</span>。硬科技午后出现大资金出逃信号，"硬切软"盘面确认。但CPO受英伟达量产催化仍有支撑，存储板块多空分歧明显。下周关注非农数据后科技股能否企稳，短线追高风险大。</div>
+        </div>
+        <div class="predict-item">
+            <div class="sector-name">⛏️ 工业有色</div>
+            <div class="detail">短期判断：<span class="highlight">中线偏多，短线震荡</span>。刚果(金)限矿+美国限制钨出口构成供给端利好，铜钴钨资源股中线逻辑加固。但今日盘面稀土、存储器走弱，短线需消化获利盘。关注洛阳钼业、紫金矿业方向。</div>
+        </div>
+        <div class="predict-item">
+            <div class="sector-name">🤖 机器人</div>
+            <div class="detail">短期判断：<span class="highlight">事件驱动，波段机会</span>。宇树科技上市+8月世界机器人大会双重催化，今日人形机器人概念走强。但板块前期涨幅已大，适合事件驱动型波段操作，不宜重仓追高。关注减速器、伺服电机核心零部件方向。</div>
+        </div>
+        <div class="predict-item">
+            <div class="sector-name">⚡ 电网设备</div>
+            <div class="detail">短期判断：<span class="highlight">政策主线，中线看好</span>。"六张网"政策定调明确，电网投资高景气延续。今日盘面有所分化但中期逻辑不变，回调即是布局机会。重点关注特高压、智能电网、电力自动化龙头。</div>
+        </div>
+        <div class="predict-item">
+            <div class="sector-name">🥇 黄金（现货/期货）</div>
+            <div class="detail">短期判断：<span class="highlight">高位震荡，等待非农指引</span>。金价从4304高点回落后在4227-4350区间震荡，今晚非农数据是关键变量。若数据疲弱则降息预期进一步升温，金价有望再攻4300+；若数据强劲则短线承压。中线趋势仍偏多。</div>
+        </div>
+        <div class="predict-item">
+            <div class="sector-name">📈 黄金股票</div>
+            <div class="detail">短期判断：<span class="highlight">跟随金价波动，短线承压</span>。今日A股黄金概念早盘走弱，连续暴涨后技术回调。但金价维持4200+高位对矿企利润支撑明确，回调后仍具配置价值。下周关注非农后方向选择。</div>
+        </div>
+    </div>
+
+    <!-- 第四部分：今日关注方向 -->
+    <div class="section">
+        <div class="section-title"><span class="section-num">4</span>建议关注方向</div>
         
-        // 支持转图片功能
-        function capturePageAsImage() {
-            alert("页面截图功能已准备就绪。您可以使用浏览器截图工具或按Ctrl+Shift+S（Windows）或Cmd+Shift+S（Mac）进行截图。");
-        }
+        <div class="focus-card">
+            <div class="title">🥇 方向一：算力网络 + 新型电网（"六张网"）</div>
+            <div class="desc">政治局会议明确定调"六张网"新基建为全年最强政策赛道。算力硬件（高速光模块、存储芯片、数据中心电力设备）+ 新型电网（特高压、智能配电）有望持续获得政策加码和资金关注。</div>
+            <div class="source">来源：7月政治局会议 / 银河证券8月策略 / 招商证券8月观点</div>
+        </div>
         
-        // 添加截图按钮
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('header');
-            const screenshotBtn = document.createElement('button');
-            screenshotBtn.innerHTML = '<i class="fas fa-camera mr-2"></i>截图保存';
-            screenshotBtn.className = 'absolute top-4 right-4 bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-100 transition-colors';
-            screenshotBtn.onclick = capturePageAsImage;
-            header.appendChild(screenshotBtn);
-        });
-    </script>
+        <div class="focus-card">
+            <div class="title">🥈 方向二：半导体设备国产替代 + 存储周期反转</div>
+            <div class="desc">招商证券指出科技方向调整基本告一段落，半导体（存储周期反转、设备国产替代）是核心成长主线。大基金三期+补贴政策持续加码，中报业绩验证期优选有真实订单标的。</div>
+            <div class="source">来源：招商证券《否极泰来，蓄势进攻》/ 大基金三期动态</div>
+        </div>
+        
+        <div class="focus-card">
+            <div class="title">🥉 方向三：人形机器人（事件催化波段）</div>
+            <div class="desc">8月世界机器人大会即将召开，宇树科技科创板上市带动板块情绪。工信部明确2026年产量目标10万台，产业从技术研发转向规模制造。适合波段参与，聚焦减速器、传感器、电机零部件。</div>
+            <div class="source">来源：工信部 / 世界机器人大会组委会 / 多家券商8月策略</div>
+        </div>
+        
+        <div class="focus-card">
+            <div class="title">🏅 方向四：黄金及贵金属（降息+避险）</div>
+            <div class="desc">ADP数据大幅不及预期→降息预期升温→金价中枢上移。全球央行持续增持黄金（Q2净买入288.9吨创纪录），地缘风险（霍尔木兹海峡）提供额外支撑。中线配置价值明确。</div>
+            <div class="source">来源：世界黄金协会 / 美联储降息预期 / 地缘局势</div>
+        </div>
+        
+        <div class="focus-card">
+            <div class="title">🎖️ 方向五：工业有色（战略金属供给收紧）</div>
+            <div class="desc">刚果(金)限制铜钴出口+美国限制钨废料出口，全球战略金属供给端持续收紧。叠加降息周期利好大宗商品定价，有色资源中线逻辑加固。关注铜、钴、钨、稀土方向。</div>
+            <div class="source">来源：刚果(金)矿业政策 / 美国出口管制 / 招商证券</div>
+        </div>
+    </div>
+
+    <!-- 第五部分：场外基金推荐 -->
+    <div class="section">
+        <div class="section-title"><span class="section-num">5</span>可关注场外基金（非A类 / ETF联接C）</div>
+        <div style="margin-bottom:14px;font-size:12px;color:#999;">⚠️ 以下为跟踪对应方向的场外基金，适合无证券账户投资者。C类份额免申购费、持有7天以上免赎回费，适合中短期持有。</div>
+        
+        <table class="fund-table">
+            <thead>
+                <tr><th>方向</th><th>基金名称</th><th>代码</th><th>类型</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2"><strong>科技/芯片</strong></td>
+                    <td>天弘中证芯片产业ETF联接C</td>
+                    <td>012553</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td>华夏中证人工智能ETF联接C</td>
+                    <td>011072</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>电网设备</strong></td>
+                    <td>华夏中证电网设备ETF联接C</td>
+                    <td>018833</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td>广发中证电力设备ETF联接C</td>
+                    <td>016873</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>机器人</strong></td>
+                    <td>华夏中证机器人ETF联接C</td>
+                    <td>018345</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td>汇添富中证机器人ETF联接C</td>
+                    <td>019547</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>黄金</strong></td>
+                    <td>华安黄金ETF联接C</td>
+                    <td>000217</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td>易方达黄金ETF联接C</td>
+                    <td>002963</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>黄金股票</strong></td>
+                    <td>永赢中证沪深港黄金产业ETF联接C</td>
+                    <td>020412</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td>国泰中证黄金股票ETF联接C</td>
+                    <td>018741</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>工业有色</strong></td>
+                    <td>天弘中证工业有色金属ETF联接C</td>
+                    <td>017193</td>
+                    <td>ETF联接C</td>
+                </tr>
+                <tr>
+                    <td>南方中证申万有色金属ETF联接C</td>
+                    <td>004433</td>
+                    <td>ETF联接C</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top:12px;font-size:12px;color:#888;line-height:1.6;">
+            💡 操作建议：当前市场结构性分化明显，建议分批建仓、避免一次性重仓。科技方向回调中分批布局，黄金/有色可逢回调加仓，机器人以事件驱动波段思路参与。
+        </div>
+    </div>
+
+    <!-- 免责声明 -->
+    <div class="disclaimer">
+        ⚠️ <strong>免责声明</strong>：以上内容仅为公开市场信息整理与个人分析，不构成任何投资建议。<br>
+        股市有风险，投资需谨慎。基金过往业绩不代表未来表现，请根据自身风险承受能力独立决策。<br>
+        数据来源：新浪财经、东方财富、同花顺、金投网、财华社等公开渠道
+    </div>
+</div>
 </body>
 </html>
