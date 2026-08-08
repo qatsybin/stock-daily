@@ -1,478 +1,437 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>盘后复盘 · 策略看板 | 2026-08-08</title>
-<style>
-:root{
-  --bg:#0B0E14; --card:#161C24; --border:#2A313C;
-  --txt:#D7DCE3; --sub:#8A93A3; --dim:#5B6472;
-  --a-up:#F04864; --a-down:#00C48C;      /* A股/港股/中概：红涨绿跌 */
-  --us-up:#00C48C; --us-down:#F04864;    /* 美股：绿涨红跌 */
-  --gold:#F5B942; --warn:#FF9F43; --blue:#4D9FFF; --purple:#B48CFF;
-  --mono:"SF Mono",Menlo,Consolas,"Courier New",monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.55;padding-bottom:64px}
-.wrap{max-width:720px;margin:0 auto;padding:12px}
-.mono{font-family:var(--mono);font-weight:700}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>每日盘后策略看板 | 2026.08.08</title>
+    <style>
+        :root {
+            --bg-color: #0B0E14;
+            --card-bg: #161C24;
+            --text-main: #EAECEF;
+            --text-sub: #848E9C;
+            --cn-up: #F04864;   /* A股/港股红涨 */
+            --cn-down: #00C48C; /* A股/港股绿跌 */
+            --us-up: #00C48C;   /* 美股绿涨 */
+            --us-down: #F04864; /* 美股红跌 */
+            --accent: #2D7FF9;
+            --border: #2A2E39;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding-bottom: 80px; font-size: 15px; }
+        
+        /* 通用组件 */
+        .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .mono { font-family: "SF Mono", "Roboto Mono", monospace; font-weight: 700; }
+        .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-right: 4px; font-weight: bold;}
+        .tag-cn { background: rgba(240, 72, 100, 0.15); color: var(--cn-up); }
+        .tag-us { background: rgba(0, 196, 140, 0.15); color: var(--us-up); }
+        .section-title { font-size: 18px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .source { font-size: 11px; color: var(--text-sub); margin-top: 4px; display: block; }
+        
+        /* 颜色类 */
+        .c-cn-up { color: var(--cn-up); }
+        .c-cn-down { color: var(--cn-down); }
+        .c-us-up { color: var(--us-up); }
+        .c-us-down { color: var(--us-down); }
+        .c-accent { color: var(--accent); }
 
-/* ── 头部 ── */
-header{background:linear-gradient(180deg,#11151d,#0B0E14);border-bottom:1px solid var(--border);padding:14px 16px 12px;position:sticky;top:0;z-index:50;backdrop-filter:blur(6px)}
-.hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;max-width:720px;margin:0 auto}
-.hrow h1{font-size:17px;font-weight:800;letter-spacing:.5px}
-.hrow h1 span{color:var(--gold)}
-.hsub{font-size:11px;color:var(--sub);margin-top:3px}
-.clockbox{text-align:right;flex-shrink:0}
-.clockbox .lbl{font-size:10px;color:var(--dim);letter-spacing:1px}
-#clock{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--gold)}
+        /* 顶部横幅 */
+        .top-banner { background: linear-gradient(135deg, #1e2330 0%, #161c24 100%); padding: 20px 16px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+        .top-banner h1 { font-size: 16px; color: var(--text-sub); margin-bottom: 6px; }
+        .top-banner p { font-size: 18px; font-weight: bold; color: #fff; }
 
-/* ── 卡片通用 ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:12px}
-h2{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:2px}
-h2 .no{font-family:var(--mono);color:var(--bg);background:var(--gold);border-radius:5px;padding:1px 7px;font-size:12px}
-.hdesc{font-size:11px;color:var(--sub);margin-bottom:6px}
+        /* 情绪环 */
+        .mood-container { display: flex; align-items: center; gap: 20px; }
+        .mood-chart { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+        .mood-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .mood-text span { display: block; font-size: 20px; font-weight: bold; color: var(--cn-up); }
+        .mood-text small { font-size: 10px; color: var(--text-sub); }
+        .mood-desc { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+        .mood-desc strong { color: var(--text-main); }
 
-/* ── 情绪环 ── */
-.sentiment{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.ringbox{position:relative;width:132px;height:132px;flex-shrink:0}
-.ringbox svg{transform:rotate(0deg)}
-.ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center}
-.ringtxt b{font-family:var(--mono);font-size:24px;color:var(--a-up)}
-.ringtxt i{font-style:normal;font-size:10px;color:var(--sub);margin-top:2px}
-.sstats{flex:1;min-width:200px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.sstat{background:#10151d;border:1px solid var(--border);border-radius:8px;padding:7px 9px}
-.sstat .k{font-size:10px;color:var(--dim)}
-.sstat .v{font-family:var(--mono);font-weight:700;font-size:13px;margin-top:1px}
+        /* 表格 */
+        .market-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .market-table th { text-align: left; color: var(--text-sub); font-weight: normal; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .market-table td { padding: 10px 0; border-bottom: 1px solid rgba(42, 46, 57, 0.5); }
+        .market-table tr:last-child td { border-bottom: none; }
+        .market-table .col-right { text-align: right; }
 
-/* ── 指数网格 ── */
-.idxgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.idx{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px}
-.idx .top{display:flex;justify-content:space-between;align-items:center}
-.idx .name{font-size:13px;font-weight:700}
-.mkt{font-size:9px;border:1px solid var(--border);color:var(--sub);border-radius:4px;padding:1px 5px}
-.idx .px{font-family:var(--mono);font-weight:800;font-size:19px;margin-top:4px}
-.idx .chg{font-family:var(--mono);font-weight:700;font-size:12px}
-.idx .meta{display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);margin-top:6px;border-top:1px dashed var(--border);padding-top:6px}
-.ma5y{color:var(--gold)}.ma5n{color:var(--dim)}
-/* 涨跌色 */
-.a-up{color:var(--a-up)}.a-down{color:var(--a-down)}
-.us-up{color:var(--us-up)}.us-down{color:var(--us-down)}
-.legend{font-size:10px;color:var(--dim);margin-top:8px}
-.legend b{font-family:var(--mono)}
+        /* 折叠交互 */
+        .collapse-btn { width: 100%; background: rgba(45, 127, 249, 0.1); color: var(--accent); border: none; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+        .hidden-content { display: none; }
+        .skip-btn { background: #2A2E39; color: var(--text-sub); border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; margin-left: 8px; }
+        .pro-data.hidden { display: none; }
 
-/* ── 资金流 ── */
-.flow h3{font-size:12.5px;font-weight:700;margin:10px 0 6px;display:flex;align-items:center;gap:6px}
-.frow{display:flex;justify-content:space-between;align-items:center;background:#10151d;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:12.5px}
-.frow .amt{font-family:var(--mono);font-weight:800;font-size:13px}
-.frow .ratio{font-size:10px;color:var(--sub);font-family:var(--mono)}
-.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
+        /* 消息卡片 */
+        .news-item { padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px dashed var(--border); }
+        .news-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .news-head { font-weight: bold; font-size: 15px; margin-bottom: 6px; display: flex; justify-content: space-between; }
+        .news-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; font-size: 11px; }
+        .news-trans { background: rgba(255,255,255,0.05); padding: 8px 10px; border-radius: 6px; font-size: 13px; color: #d1d5db; margin-top: 6px; border-left: 3px solid var(--accent); }
 
-/* ── 事件雷达 ── */
-.event{background:var(--card);border:1px solid var(--border);border-left-width:3px;border-radius:10px;padding:10px 12px;margin-bottom:8px}
-.ev-pos{border-left-color:var(--a-up)}
-.ev-neg{border-left-color:var(--a-down)}
-.ev-neu{border-left-color:var(--blue)}
-.ev-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-.ev-title{font-size:13.5px;font-weight:700}
-.ev-sec{font-size:10px;color:var(--gold);border:1px solid rgba(245,185,66,.4);border-radius:4px;padding:0 5px;margin-right:5px}
-.badge{font-size:10px;border-radius:4px;padding:1px 6px;white-space:nowrap;flex-shrink:0}
-.b-fire{background:rgba(240,72,100,.15);color:var(--a-up);border:1px solid rgba(240,72,100,.45)}
-.b-warn{background:rgba(255,159,67,.12);color:var(--warn);border:1px solid rgba(255,159,67,.45)}
-.b-cold{background:rgba(77,159,255,.12);color:var(--blue);border:1px solid rgba(77,159,255,.45)}
-.b-neg{background:rgba(0,196,140,.12);color:var(--a-down);border:1px solid rgba(0,196,140,.45)}
-.b-cycle{background:#10151d;color:var(--sub);border:1px solid var(--border)}
-.ev-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;align-items:center}
-.ev-us{font-size:11.5px;color:var(--sub);margin-top:7px;background:#10151d;border-radius:6px;padding:6px 8px}
-.ev-us b{color:var(--txt)}
-.ev-note{font-size:11px;color:var(--warn);margin-top:6px}
-.exhaust{border:1px solid rgba(240,72,100,.5);background:rgba(240,72,100,.08);color:var(--a-up);font-size:10.5px;border-radius:5px;padding:2px 7px;font-weight:700}
+        /* 操作指南 */
+        .scene-card { border-left: 4px solid var(--text-sub); padding-left: 12px; margin-bottom: 16px; }
+        .scene-A { border-color: var(--cn-up); }
+        .scene-B { border-color: var(--cn-down); }
+        .scene-C { border-color: #F5A623; }
+        .scene-title { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+        .scene-action { font-size: 14px; color: #fff; background: rgba(255,255,255,0.08); padding: 8px; border-radius: 6px; margin-top: 6px; }
 
-/* ── 情景推演 ── */
-.scen{border-radius:10px;padding:11px 12px;margin-bottom:8px;border:1px solid var(--border);background:var(--card)}
-.scen .st{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.scen .st b{font-size:13px}
-.cond{font-family:var(--mono);font-size:11px;color:var(--gold)}
-.scen p{font-size:12px;color:var(--sub)}
-.scen p b{color:var(--txt)}
-.scen .anchor{font-family:var(--mono);font-weight:700;color:var(--txt)}
-.sA{border-left:3px solid var(--a-up)}
-.sB{border-left:3px solid var(--gold)}
-.sC{border-left:3px solid var(--a-down)}
-.anchorbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.anchorbar .ab{background:#10151d;border:1px solid var(--border);border-radius:8px;padding:9px}
-.anchorbar .k{font-size:10px;color:var(--dim)}
-.anchorbar .v{font-family:var(--mono);font-weight:800;font-size:16px;color:var(--gold);margin-top:2px}
-.anchorbar .s{font-size:10px;color:var(--sub);margin-top:2px}
+        /* 基金实操 */
+        .fund-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .fund-row:last-child { border-bottom: none; }
+        .fund-name { font-weight: bold; font-size: 14px; }
+        .fund-rate { font-size: 13px; font-weight: bold; }
+        .rate-green { color: var(--us-up); }
+        .rate-yellow { color: #F5A623; }
+        .rate-red { color: var(--cn-up); }
+        .fund-detail { font-size: 12px; color: var(--text-sub); margin-top: 4px; line-height: 1.6; }
+        .warn-tip { background: rgba(240, 72, 100, 0.1); color: var(--cn-up); padding: 8px; border-radius: 6px; font-size: 12px; margin-top: 10px; }
 
-/* ── 金工池 ── */
-.inst{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:8px}
-.inst .it{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.inst .nm{font-size:13.5px;font-weight:700}
-.inst .src{font-size:10.5px;color:var(--sub);margin-top:3px}
-.inst .logic{font-size:12px;color:var(--txt);margin-top:7px}
-.valrow{display:flex;align-items:center;gap:8px;margin-top:8px}
-.pbar{flex:1;height:6px;background:#10151d;border-radius:3px;overflow:hidden}
-.pbar i{display:block;height:100%;border-radius:3px}
-.valtxt{font-family:var(--mono);font-size:11px;color:var(--sub);white-space:nowrap}
-.v-low{color:var(--a-down)}.v-mid{color:var(--gold)}.v-high{color:var(--a-up)}
-.tag-new{background:rgba(180,140,255,.12);color:var(--purple);border:1px solid rgba(180,140,255,.45)}
-.tag-again{background:rgba(77,159,255,.12);color:var(--blue);border:1px solid rgba(77,159,255,.45)}
+        /* 底部铁律 */
+        .footer-rules { position: fixed; bottom: 0; left: 0; right: 0; background: #11151D; border-top: 1px solid var(--border); padding: 10px 16px; display: flex; justify-content: space-around; font-size: 11px; color: var(--text-sub); z-index: 99; }
+        .footer-rules span { display: flex; align-items: center; gap: 4px; }
+        .disclaimer { text-align: center; font-size: 10px; color: #555; padding: 20px 16px 10px; }
 
-/* ── 基金池 ── */
-.fund{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:8px}
-.fund .ft{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-.fund .fn{font-size:13px;font-weight:700}
-.fund .code{font-family:var(--mono);font-size:11px;color:var(--sub);margin-top:2px}
-.grade{font-size:11px;font-weight:800;border-radius:5px;padding:2px 8px;white-space:nowrap}
-.gA{background:rgba(240,72,100,.15);color:var(--a-up);border:1px solid var(--a-up)}
-.gB{background:rgba(245,185,66,.12);color:var(--gold);border:1px solid var(--gold)}
-.gC{background:rgba(91,100,114,.15);color:var(--sub);border:1px solid var(--dim)}
-.fund .reason{font-size:11.5px;color:var(--sub);margin-top:6px}
-.fund .cap{font-size:10.5px;color:var(--gold);margin-top:6px;font-family:var(--mono)}
-.warnbox{border:1px solid rgba(240,72,100,.5);background:rgba(240,72,100,.07);border-radius:10px;padding:10px 12px;font-size:11.5px;color:#FFB3C0;margin-top:4px}
-.warnbox b{color:var(--a-up)}
-
-/* ── 展开/收起 ── */
-.collapsible .extra{display:none}
-.collapsible.open .extra{display:block}
-.morebtn{display:block;width:100%;background:#10151d;border:1px dashed var(--border);color:var(--gold);font-size:12.5px;padding:9px;border-radius:8px;margin-top:4px;cursor:pointer;font-weight:700}
-.morebtn:active{background:#1a212c}
-
-/* ── 底部固定 ── */
-.footbar{position:fixed;bottom:0;left:0;right:0;background:#11151dee;border-top:1px solid var(--border);padding:9px 14px;text-align:center;font-size:10.5px;color:var(--sub);z-index:60;backdrop-filter:blur(6px)}
-.footbar b{color:var(--warn)}
-.datanote{font-size:10px;color:var(--dim);margin-top:14px;text-align:center;line-height:1.7}
-@media(min-width:600px){
-  .wrap{padding:16px}
-  .sstats{grid-template-columns:repeat(2,1fr)}
-}
-</style>
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="hrow">
-    <div>
-      <h1>📋 盘后复盘 · 策略看板 <span>W32</span></h1>
-      <div class="hsub">复盘基准：2026-08-07（周五）收盘 · 今日 2026-08-08 周六</div>
-    </div>
-    <div class="clockbox">
-      <div class="lbl">SERVER TIME</div>
-      <div id="clock">----/--/-- --:--:--</div>
-    </div>
-  </div>
-</header>
-
-<div class="wrap">
-
-<!-- ═══ 核心情绪指标 ═══ -->
-<div class="card sentiment">
-  <div class="ringbox">
-    <svg width="132" height="132" viewBox="0 0 132 132">
-      <defs>
-        <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#F04864"/>
-          <stop offset="100%" stop-color="#F5B942"/>
-        </linearGradient>
-      </defs>
-      <circle cx="66" cy="66" r="54" stroke="#2A313C" stroke-width="11" fill="none"/>
-      <!-- 53.0% × 2πr(339.29) ≈ 179.8 -->
-      <circle cx="66" cy="66" r="54" stroke="url(#rg)" stroke-width="11" fill="none"
-        stroke-dasharray="179.8 339.3" stroke-linecap="round" transform="rotate(-90 66 66)"/>
-    </svg>
-    <div class="ringtxt">
-      <b>53.0%</b>
-      <i>全市场赚钱效应</i>
-    </div>
-  </div>
-  <div class="sstats">
-    <div class="sstat"><div class="k">涨 / 跌家数</div><div class="v"><span class="a-up">2853</span> : <span class="a-down">2530</span></div></div>
-    <div class="sstat"><div class="k">两市成交额</div><div class="v">2.66万亿 <span style="color:var(--a-up);font-size:10px">+1356亿</span></div></div>
-    <div class="sstat"><div class="k">涨跌幅中位数</div><div class="v" style="color:var(--gold)">+0.12%</div></div>
-    <div class="sstat"><div class="k">连阳 / 涨停</div><div class="v">4连阳 · 70+家涨停</div></div>
-  </div>
-</div>
-<div class="legend">⚠️ 指数强但中位数仅 +0.12%：<b>权重搭台、题材分化</b>，赚钱效应集中在创新药/AI硬件/贵金属三条线，警惕普涨幻觉。</div>
-
-<!-- ═══ 模块一 ═══ -->
-<h2><span class="no">01</span>全球盘面全景图</h2>
-<div class="hdesc">数据截至 2026-08-07 各市场收盘（美股为北京时间 08-08 凌晨）</div>
-<div class="idxgrid">
-
-  <div class="idx">
-    <div class="top"><span class="name">标普500</span><span class="mkt">美股</span></div>
-    <div class="px us-up">7757.76</div>
-    <div class="chg us-up">▲ +0.62%（收盘新高）</div>
-    <div class="meta"><span>振幅 0.9%</span><span class="ma5y">站上5日线 ✓</span></div>
-  </div>
-
-  <div class="idx">
-    <div class="top"><span class="name">纳斯达克100</span><span class="mkt">美股</span></div>
-    <div class="px us-up">29741.28</div>
-    <div class="chg us-up">▲ +1.38%</div>
-    <div class="meta"><span>振幅 1.6%</span><span class="ma5y">站上5日线 ✓</span></div>
-  </div>
-
-  <div class="idx">
-    <div class="top"><span class="name">恒生指数</span><span class="mkt">港股</span></div>
-    <div class="px a-up">25668.03</div>
-    <div class="chg a-up">▲ +0.54%</div>
-    <div class="meta"><span>振幅 1.1%</span><span class="ma5n">5日线下方 ✗</span></div>
-  </div>
-
-  <div class="idx">
-    <div class="top"><span class="name">日经225</span><span class="mkt">日股</span></div>
-    <div class="px us-down">65606.71</div>
-    <div class="chg us-down">▼ -0.12%</div>
-    <div class="meta"><span>振幅 0.9%</span><span class="ma5y">站上5日线 ✓</span></div>
-  </div>
-
-  <div class="idx">
-    <div class="top"><span class="name">上证指数</span><span class="mkt">A股</span></div>
-    <div class="px a-up">3940.04</div>
-    <div class="chg a-up">▲ +1.02%</div>
-    <div class="meta"><span>振幅 1.42%</span><span class="ma5y">站上5日线 ✓</span></div>
-  </div>
-
-  <div class="idx">
-    <div class="top"><span class="name">创业板指</span><span class="mkt">A股</span></div>
-    <div class="px a-up">3563.12</div>
-    <div class="chg a-up">▲ +1.35%</div>
-    <div class="meta"><span>振幅 1.86%</span><span class="ma5y">站上5日线 ✓</span></div>
-  </div>
-
-  <div class="idx" style="grid-column:span 2">
-    <div class="top"><span class="name">科创50</span><span class="mkt">A股 · 周五最强</span></div>
-    <div class="px a-up">1452.38</div>
-    <div class="chg a-up">▲ +2.51%（科创综指 +3.35%，AI硬件+创新药双驱动）</div>
-    <div class="meta"><span>振幅 3.08%</span><span class="ma5y">站上5日线 ✓ · 放量突破</span></div>
-  </div>
-</div>
-<div class="legend">配色规则：A股/港股 <b class="a-up">红涨</b>/<b class="a-down">绿跌</b>；美股/日股 <b class="us-up">绿涨</b>/<b class="us-down">红跌</b>。</div>
-
-<div class="card flow">
-  <h3 style="color:var(--a-up)"><span class="dot" style="background:var(--a-up)"></span>主力资金净流入 TOP3（A股行业）</h3>
-  <div class="frow"><span>① 创新药 / CRO</span><span><span class="amt a-up">+48.6亿</span> <span class="ratio">成交占比 18.4%</span></span></div>
-  <div class="frow"><span>② 光通信 / PCB（AI硬件）</span><span><span class="amt a-up">+39.2亿</span> <span class="ratio">成交占比 12.7%</span></span></div>
-  <div class="frow"><span>③ 贵金属 / 工业有色</span><span><span class="amt a-up">+21.5亿</span> <span class="ratio">成交占比 9.6%</span></span></div>
-  <h3 style="color:var(--a-down)"><span class="dot" style="background:var(--a-down)"></span>主力资金净流出 TOP3</h3>
-  <div class="frow"><span>① 存储芯片（闪迪/西数财报拖累）</span><span><span class="amt a-down">-36.8亿</span> <span class="ratio">成交占比 11.2%</span></span></div>
-  <div class="frow"><span>② AI应用 / 传媒</span><span><span class="amt a-down">-24.1亿</span> <span class="ratio">成交占比 8.3%</span></span></div>
-  <div class="frow"><span>③ 白酒 / 食品饮料</span><span><span class="amt a-down">-18.7亿</span> <span class="ratio">成交占比 7.5%</span></span></div>
-  <div class="legend">注：同时校验「净流入额」与「成交额占比」，剔除因板块成交体量虚高的伪主力信号。</div>
-</div>
-
-<!-- ═══ 模块二 ═══ -->
-<h2><span class="no">02</span>事件驱动雷达</h2>
-<div class="hdesc">范围锁定：半导体 / 黄金贵金属 / 工业有色 / 机器人 / 电网设备 / 创新药CRO。每条附美股映射佐证。</div>
-<div class="collapsible" id="evlist">
-
-  <div class="event ev-pos">
-    <div class="ev-head">
-      <div class="ev-title"><span class="ev-sec">黄金/贵金属</span>非农爆冷，金价站上4400美元</div>
-      <span class="badge b-fire">🔥高确定性</span>
-    </div>
-    <div class="ev-meta"><span class="badge b-cycle">中期基本面 / 1周+</span><span class="badge b-cycle">A股板块周五 +2.7%（未透支）</span></div>
-    <div class="ev-us">🇺🇸 美股映射：7月非农 <b>-2.3万</b>（预期+8万），9月加息预期骤降 → COMEX金 <b>+2.1% 破4400</b>；纽蒙特(NEM) <b class="us-up">+4.2%</b>、巴里克 <b class="us-up">+3.1%</b>。离岸人民币逼近6.74创三年新高。</div>
-  </div>
-
-  <div class="event ev-pos">
-    <div class="ev-head">
-      <div class="ev-title"><span class="ev-sec">半导体·AI硬件</span>光通信爆发，英伟达周涨10%+</div>
-      <span class="badge b-fire">🔥高确定性</span>
-    </div>
-    <div class="ev-meta"><span class="badge b-cycle">中期基本面 / 1周+</span><span class="badge b-cycle">A股光模块周五 +3.8%（未透支）</span></div>
-    <div class="ev-us">🇺🇸 美股映射：Coherent <b class="us-up">+12.4%</b>（周累涨40%+）、Lumentum <b class="us-up">+8%</b>、英伟达 <b class="us-up">+1.9%</b>（周+10%）；费城半导体指数两连阳、周涨9%+。A股PCB/光模块周五涨停潮，算力景气获海外硬验证。</div>
-  </div>
-
-  <div class="event ev-neg">
-    <div class="ev-head">
-      <div class="ev-title"><span class="ev-sec">半导体·存储</span>【利空】存储双雄财报后重挫</div>
-      <span class="badge b-neg">利空确认</span>
-    </div>
-    <div class="ev-meta"><span class="badge b-cycle">短期情绪 / 1-3天</span><span class="badge b-cycle">A股芯片指数距年内高点已回撤24%</span></div>
-    <div class="ev-us">🇺🇸 美股映射：闪迪 <b class="us-down">-3.9%</b>、西部数据 <b class="us-down">-4.1%</b>（财报指引不及预期）；周四铠侠/SK海力士均跌超10%。<b>结论：AI景气内部分化——"算力硬件强、存储见顶分歧"，存储链短线规避。</b></div>
-  </div>
-
-  <div class="extra">
-    <div class="event ev-pos">
-      <div class="ev-head">
-        <div class="ev-title"><span class="ev-sec">创新药·CRO</span>CRO涨停潮，但单日已透支</div>
-        <span class="badge b-warn">⚠️中确定性</span>
-      </div>
-      <div class="ev-meta"><span class="badge b-cycle">短期情绪 / 1-3天</span><span class="exhaust">[已透支，警惕高开低走] 周五 +4.86%</span></div>
-      <div class="ev-us">🇺🇸 美股映射：药明康德ADR <b class="us-up">+2.3%</b>，映射温和、弱于A股涨幅 → 情绪抢跑嫌疑。<b>触发剔除法令（单日>4.5%），不列入周一重点追买，只等回踩。</b></div>
+    <!-- 顶部固定横幅 -->
+    <div class="top-banner">
+        <h1>📅 2026年8月8日 周六盘后策略</h1>
+        <p>💡 今日总结：美股标普创新高纳指大涨，A股放量四连阳站稳3940，CRO与AI硬件双主线爆发，周一关注量能持续性。</p>
     </div>
 
-    <div class="event ev-pos">
-      <div class="ev-head">
-        <div class="ev-title"><span class="ev-sec">工业有色·铜</span>纽铜纪录高位，弱美元续支撑</div>
-        <span class="badge b-warn">⚠️中确定性</span>
-      </div>
-      <div class="ev-meta"><span class="badge b-cycle">中期基本面 / 1周+</span><span class="badge b-cycle">A股工业有色周五 +1.9%</span></div>
-      <div class="ev-us">🇺🇸 美股映射：自由港麦克莫兰(FCX) <b class="us-up">+1.8%</b>。纽铜两日回调但连涨三周，非农弱美元+矿端供给刚性逻辑未破坏；铝受国内产能天花板支撑，弹性弱于铜。</div>
+    <div class="container">
+
+        <!-- 模块0：情绪可视化 -->
+        <div class="card">
+            <div class="mood-container">
+                <div class="mood-chart">
+                    <svg viewBox="0 0 36 36" style="width:100%; height:100%; transform: rotate(-90deg);">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2A2E39" stroke-width="3" />
+                        <!-- 上涨家数2853 / (2853+2530) ≈ 53% -->
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F04864" stroke-width="3" stroke-dasharray="53, 100" stroke-linecap="round" />
+                    </svg>
+                    <div class="mood-text">
+                        <span>53%</span>
+                        <small>上涨占比</small>
+                    </div>
+                </div>
+                <div class="mood-desc">
+                    <strong>赚钱效应：结构性回暖 🔥</strong><br>
+                    全市场上涨2853家，下跌2530家。虽然指数大涨，但并非普涨，资金高度集中在<strong>CRO创新药</strong>和<strong>AI硬件(PCB/CPO)</strong>两条线。没买对主线的体感一般。
+                    <span class="source">[来源：新浪财经/东方财富 2026.08.07]</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模块一：全球盘面 -->
+        <div class="card">
+            <div class="section-title">一、全球盘面全景图 <button class="skip-btn" onclick="togglePro(this)">小白跳过宏观</button></div>
+            
+            <table class="market-table">
+                <thead>
+                    <tr>
+                        <th>指数名称</th>
+                        <th class="col-right">最新价</th>
+                        <th class="col-right">涨跌幅</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 美股 -->
+                    <tr>
+                        <td><span class="tag tag-us">美</span>标普500</td>
+                        <td class="col-right mono">7,757.64</td>
+                        <td class="col-right mono c-us-up">+0.62% (新高)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-us">美</span>纳斯达克</td>
+                        <td class="col-right mono">26,690.62</td>
+                        <td class="col-right mono c-us-up">+1.30%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-us">美</span>道琼斯</td>
+                        <td class="col-right mono">54,036.93</td>
+                        <td class="col-right mono c-us-up">+0.28%</td>
+                    </tr>
+                    <!-- A股 -->
+                    <tr>
+                        <td><span class="tag tag-cn">A</span>上证指数</td>
+                        <td class="col-right mono">3,940.04</td>
+                        <td class="col-right mono c-cn-up">+1.02% (4连阳)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-cn">A</span>创业板指</td>
+                        <td class="col-right mono">3,563.12</td>
+                        <td class="col-right mono c-cn-up">+1.35%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-cn">A</span>科创50</td>
+                        <td class="col-right mono">1,744.02</td>
+                        <td class="col-right mono c-cn-up">+2.51%</td>
+                    </tr>
+                    <!-- 港股 -->
+                    <tr>
+                        <td><span class="tag tag-cn">港</span>恒生指数</td>
+                        <td class="col-right mono">25,668.03</td>
+                        <td class="col-right mono c-cn-up">+0.54%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <span class="source">[来源：东方财富/金投网 2026.08.07收盘数据]</span>
+
+            <!-- 专业数据区（可折叠） -->
+            <div class="pro-data" style="margin-top:12px; padding-top:12px; border-top:1px dashed var(--border);">
+                <div style="font-size:13px; margin-bottom:6px;"><strong>A股量能：</strong>全市场成交 <span class="mono c-accent">2.66万亿</span>，较前日放量1356亿，连续24日超万亿。[来源：新浪财经]</div>
+                <div style="font-size:13px; margin-bottom:6px;"><strong>主力流入TOP3：</strong>医疗服务(+8.4%)、玻璃玻纤(+7.1%)、元件(+6.7%) [来源：新浪财经ETF英雄汇]</div>
+                <div style="font-size:13px;"><strong>主力流出方向：</strong>软件开发、银行、煤炭等防御板块资金撤离 [来源：今日头条复盘]</div>
+            </div>
+
+            <div style="margin-top:12px; background:rgba(45,127,249,0.08); padding:10px; border-radius:8px; font-size:13px;">
+                🐣 <strong>小白一句话：</strong>外围美股创新高给了底气，A股成交量放大说明有钱进场了。现在市场不是乱炒，而是盯着“医药”和“AI硬件”两个优等生在猛买。
+            </div>
+        </div>
+
+        <!-- 模块二：重大消息 -->
+        <div class="card">
+            <div class="section-title">二、影响周一涨跌的重大消息</div>
+            
+            <!-- 默认显示3条 -->
+            <div id="news-list">
+                <!-- 消息1：CRO -->
+                <div class="news-item">
+                    <div class="news-head">
+                        💊 CRO全线爆发，十余股涨停
+                        <span class="tag tag-cn">短期</span>
+                    </div>
+                    <div class="news-meta">
+                        <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">可信度：官方实锤</span>
+                        <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">美股验证：生物医药指数走强</span>
+                    </div>
+                    <div style="font-size:13px; color:var(--text-sub);">跨国药企今年外部开支已达2003亿美元，占去年全年73.5%，国内CRO龙头半年报净利增近30%。</div>
+                    <div class="news-trans">🐣 翻译：国外大药厂研发预算花不完，疯狂外包给中国公司做。国内CRO企业业绩炸裂，这是真金白银的利好，不是讲故事。</div>
+                    <span class="source">[来源：财联社/新浪财经 2026.08.07]</span>
+                </div>
+
+                <!-- 消息2：AI硬件 -->
+                <div class="news-item">
+                    <div class="news-head">
+                        🤖 高盛力挺AI硬件，PCB/CPO涨停潮
+                        <span class="tag tag-cn">中期</span>
+                    </div>
+                    <div class="news-meta">
+                        <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">可信度：券商预测</span>
+                        <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">美股验证：Coherent +13%, Lumentum +6%</span>
+                    </div>
+                    <div style="font-size:13px; color:var(--text-sub);">高盛发布重磅研报看好AI服务器产业链，美股光通信板块隔夜大涨映射A股。</div>
+                    <div class="news-trans">🐣 翻译：国际大行喊单，加上美股相关公司昨晚暴涨，A股做光模块和电路板的跟着嗨了。有业绩支撑的硬件比纯软件靠谱。</div>
+                    <span class="source">[来源：新浪财经/同花顺 2026.08.07]</span>
+                </div>
+
+                <!-- 消息3：特高压 -->
+                <div class="news-item">
+                    <div class="news-head">
+                        ⚡ 特高压招标超去年全年
+                        <span class="tag tag-cn">中期</span>
+                    </div>
+                    <div class="news-meta">
+                        <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">可信度：官方实锤</span>
+                        <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">美股验证：N/A (内需驱动)</span>
+                    </div>
+                    <div style="font-size:13px; color:var(--text-sub);">国网2026前三批特高压招标累计292.61亿元，已超2025年全年220.62亿元。许继电气等龙头中标大单。</div>
+                    <div class="news-trans">🐣 翻译：国家电网在疯狂下单建电网，订单量比去年一整年还多。这是国家基建硬任务，相关企业未来几年饭碗很稳。</div>
+                    <span class="source">[来源：新浪财经/雪球 2026.07下旬]</span>
+                </div>
+
+                <!-- 隐藏消息 -->
+                <div class="hidden-content" id="more-news">
+                    <!-- 消息4：机器人 -->
+                    <div class="news-item">
+                        <div class="news-head">
+                            🦾 世界机器人大会8.19北京开幕
+                            <span class="tag tag-cn">短期催化</span>
+                        </div>
+                        <div class="news-meta">
+                            <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">可信度：官方实锤</span>
+                            <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">美股验证：特斯拉Optimus量产中</span>
+                        </div>
+                        <div style="font-size:13px; color:var(--text-sub);">2026世界机器人大会将于8月19-23日举办，比亚迪人形机器人8月郑州上岗，行业进入量产元年。</div>
+                        <div class="news-trans">🐣 翻译：月底有个顶级机器人展会，加上车企开始用机器人干活了。开会前通常会有炒作预期，但要注意“利好兑现变利空”。</div>
+                        <span class="source">[来源：人民网/搜狐视频 2026.07]</span>
+                    </div>
+
+                    <!-- 消息5：黄金 -->
+                    <div class="news-item">
+                        <div class="news-head">
+                            🥇 黄金高位震荡，避险情绪犹存
+                            <span class="tag tag-us">中期</span>
+                        </div>
+                        <div class="news-meta">
+                            <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">可信度：官方实锤</span>
+                            <span style="background:#2A2E39; padding:2px 6px; border-radius:4px;">COMEX黄金: 4522美元/盎司</span>
+                        </div>
+                        <div style="font-size:13px; color:var(--text-sub);">现货黄金报4522美元/盎司，日内小幅震荡。美联储观望态度明确，地缘局势仍有扰动。</div>
+                        <div class="news-trans">🐣 翻译：金价还在历史高位晃悠，没大跌也没大涨。作为账户里的“保险丝”，拿着别动就行，现在追高没必要。</div>
+                        <span class="source">[来源：新浪财经/东方财富 2026.08.08]</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="collapse-btn" onclick="toggleNews()">[ 展开全部 5 条消息 ]</button>
+        </div>
+
+        <!-- 模块三：周一操作指南 -->
+        <div class="card">
+            <div class="section-title">三、周一（8.10）具体操作指南</div>
+            
+            <div class="scene-card scene-A">
+                <div class="scene-title c-cn-up">情景A：明天高开 > 0.5% (概率较大)</div>
+                <div style="font-size:13px; color:var(--text-sub);">周五放量四连阳+美股新高，周一惯性高开可能性大。</div>
+                <div class="scene-action">
+                    ⛔ <strong>千万别追！</strong> 尤其是CRO和光模块这种周五已经高潮的板块。<br>
+                    ✅ <strong>正确做法：</strong> 手里有盈利短线的，趁冲高先卖掉20%落袋为安。空仓的别眼红，等盘中回落再说。
+                </div>
+            </div>
+
+            <div class="scene-card scene-B">
+                <div class="scene-title c-cn-down">情景B：明天低开 > 0.5%</div>
+                <div style="font-size:13px; color:var(--text-sub);">若周末出现突发利空或获利盘砸盘导致低开。</div>
+                <div class="scene-action">
+                    🎁 <strong>不用慌，这是捡便宜的机会。</strong><br>
+                    ✅ <strong>重点盯住：</strong> 半导体设备、特高压这种有业绩但周五没怎么涨的“老实人”。<br>
+                    ✅ <strong>动作：</strong> 拿出总资金的10%，分两笔买（开盘一笔，下午一笔）。
+                </div>
+            </div>
+
+            <div class="scene-card scene-C">
+                <div class="scene-title" style="color:#F5A623">情景C：平开震荡 (±0.5%以内)</div>
+                <div style="font-size:13px; color:var(--text-sub);">多空分歧，等待方向选择。</div>
+                <div class="scene-action">
+                    👀 <strong>只看成交量这个“测谎仪”。</strong><br>
+                    ✅ <strong>量能 > 2.6万亿：</strong> 说明资金还在玩，安心持有主线。<br>
+                    ❌ <strong>量能 < 2.4万亿：</strong> 说明大家都在观望，那就减点仓，把现金留出来防守。
+                </div>
+            </div>
+        </div>
+
+        <!-- 模块四：机构研究 -->
+        <div class="card">
+            <div class="section-title">四、机构近期在偷偷研究什么</div>
+            
+            <div style="margin-bottom:14px;">
+                <div style="font-weight:bold; font-size:15px;">🔬 创新药出海 (License-out)</div>
+                <div style="font-size:13px; color:var(--text-sub); margin:4px 0;">逻辑：国内药企研发成果被海外巨头高价买断，从“卖产品”变成“卖技术”，利润率飙升。</div>
+                <div style="font-size:13px; color:#F5A623;">💰 贵不贵：比过去3年 <strong>40%</strong> 的时间都便宜（经历2年深度回调，刚启动右侧）</div>
+                <span class="source">[来源：国金证券/财联社 2026.08]</span>
+            </div>
+
+            <div style="margin-bottom:14px; border-top:1px dashed var(--border); padding-top:14px;">
+                <div style="font-weight:bold; font-size:15px;">⚡ 电网设备 (特高压/数字化)</div>
+                <div style="font-size:13px; color:var(--text-sub); margin:4px 0;">逻辑：“十五五”规划超5万亿投资+新能源消纳刚需，订单确定性全市场最高。</div>
+                <div style="font-size:13px; color:#F5A623;">💰 贵不贵：比过去3年 <strong>70%</strong> 的时间都贵（7月已有一波拉升，需等回调）</div>
+                <span class="source">[来源：中信证券/今日头条 2026.08]</span>
+            </div>
+        </div>
+
+        <!-- 模块五：基金实操 -->
+        <div class="card">
+            <div class="section-title">五、场外基金(ETF联接C)买卖实操</div>
+            <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">*以下均为C类份额，适合中短线波段，免申购费</div>
+
+            <!-- 基金1 -->
+            <div class="fund-row" style="flex-direction: column; align-items: flex-start;">
+                <div style="width:100%; display:flex; justify-content:space-between;">
+                    <span class="fund-name">💊 创新药ETF联接C</span>
+                    <span class="fund-rate rate-green">🟢 可以建仓</span>
+                </div>
+                <div class="fund-detail">
+                    • <strong>买多少：</strong> 10万本金首次买 <span class="mono">5,000元</span><br>
+                    • <strong>跌了咋办：</strong> 每跌5%加仓一份(5000元)<br>
+                    • <strong>涨了咋办：</strong> 涨超8%卖出一半止盈
+                </div>
+            </div>
+
+            <!-- 基金2 -->
+            <div class="fund-row" style="flex-direction: column; align-items: flex-start;">
+                <div style="width:100%; display:flex; justify-content:space-between;">
+                    <span class="fund-name">🤖 机器人ETF联接C</span>
+                    <span class="fund-rate rate-yellow">🟡 等跌5%再买</span>
+                </div>
+                <div class="fund-detail">
+                    • <strong>理由：</strong> 8.19大会前有预期溢价，现在追容易站岗<br>
+                    • <strong>策略：</strong> 若下周回调至20日线附近，按5000元/笔试错
+                </div>
+            </div>
+
+            <!-- 基金3 -->
+            <div class="fund-row" style="flex-direction: column; align-items: flex-start;">
+                <div style="width:100%; display:flex; justify-content:space-between;">
+                    <span class="fund-name">💻 半导体ETF联接C</span>
+                    <span class="fund-rate rate-green">🟢 逢低吸纳</span>
+                </div>
+                <div class="fund-detail">
+                    • <strong>买多少：</strong> 10万本金首次买 <span class="mono">5,000元</span><br>
+                    • <strong>逻辑：</strong> 台积电CoWoS外包+英伟达订单塞爆产线，硬件端景气度真实
+                </div>
+            </div>
+
+            <div class="warn-tip">
+                ⚠️ <strong>C类避坑提示：</strong> 持有少于7天卖出会扣1.5%惩罚性手续费！买入后请务必拿满7天再操作。
+            </div>
+        </div>
+
+        <!-- 模块六：应急机制 -->
+        <div class="card" style="border-color: #F04864;">
+            <div class="section-title" style="color:var(--cn-up);">六、极端情况应急机制 🚨</div>
+            <ul style="font-size:13px; padding-left:18px; color:var(--text-sub);">
+                <li style="margin-bottom:6px;"><strong>规则1：</strong> 周一开盘30分钟，若大盘成交量比周五同期萎缩超15%，所有“🟢建仓”计划暂停，改为观望。</li>
+                <li style="margin-bottom:6px;"><strong>规则2：</strong> 若周日晚间美股期货暴跌超1.5%，周一开盘强制将总仓位降到5成以下保命。</li>
+                <li><strong>规则3：</strong> 任何一只基金亏损超过7%，无条件止损离场，不补仓不扛单。</li>
+            </ul>
+        </div>
+
+        <div class="disclaimer">
+            本文仅为策略推演与数据整理，不构成任何投资建议。市场有风险，盈亏请自负。<br>
+            数据更新时间：2026-08-08 23:07
+        </div>
     </div>
 
-    <div class="event ev-neu">
-      <div class="ev-head">
-        <div class="ev-title"><span class="ev-sec">电网设备·特高压</span>"十五五"特高压核准提速</div>
-        <span class="badge b-warn">⚠️中确定性</span>
-      </div>
-      <div class="ev-meta"><span class="badge b-cycle">中期基本面 / 1周+</span><span class="badge b-cycle">A股电网设备周五 +1.2%（低位）</span></div>
-      <div class="ev-us">🇺🇸 美股映射：GE Vernova <b class="us-up">+1.4%</b>（全球电网资本开支上行同频）。AI用电+新能源外送双驱动，柔直招标进入交付年，板块位置低、无透支。</div>
+    <!-- 底部固定铁律 -->
+    <div class="footer-rules">
+        <span>💰 闲钱投资</span>
+        <span>🚫 不追涨杀跌</span>
+        <span>🧩 分散配置</span>
     </div>
 
-    <div class="event ev-neu">
-      <div class="ev-head">
-        <div class="ev-title"><span class="ev-sec">机器人·人形</span>量产订单传闻（未证实）</div>
-        <span class="badge b-cold">❄️低确定性（仅传闻）</span>
-      </div>
-      <div class="ev-meta"><span class="badge b-cycle">短期情绪 / 1-3天</span><span class="badge b-cycle">A股机器人周五 +0.8%</span></div>
-      <div class="ev-us">🇺🇸 美股映射：特斯拉 <b class="us-up">+0.9%</b>，无增量订单公告佐证。<b>传闻级消息不给仓位，仅观察；板块PE处近3年88%分位，估值无安全垫。</b></div>
-    </div>
-  </div>
+    <script>
+        // 折叠/展开新闻
+        function toggleNews() {
+            const moreNews = document.getElementById('more-news');
+            const btn = document.querySelector('.collapse-btn');
+            if (moreNews.style.display === 'block') {
+                moreNews.style.display = 'none';
+                btn.textContent = '[ 展开全部 5 条消息 ]';
+            } else {
+                moreNews.style.display = 'block';
+                btn.textContent = '[ 收起消息 ]';
+            }
+        }
 
-  <button class="morebtn" onclick="toggleMore(this,'evlist')">[ 展开全部 7 条 ▼ ]</button>
-</div>
-
-<!-- ═══ 模块三 ═══ -->
-<h2><span class="no">03</span>下一交易日（8/10 周一）情景推演</h2>
-<div class="hdesc">拒绝单边预判，按开盘锚点触发式应对</div>
-<div class="anchorbar">
-  <div class="ab"><div class="k">A50期货（SGX夜盘）</div><div class="v">15042.0</div><div class="s">较周五日盘结算 +0.29%</div></div>
-  <div class="ab"><div class="k">离岸人民币 USDCNH</div><div class="v">6.7412</div><div class="s">创三年新高 · 利好北向</div></div>
-</div>
-
-<div class="scen sA">
-  <div class="st"><b>🔴 情景A · 强势</b><span class="cond">A50高开 &gt; +0.4%（≥15058）</span></div>
-  <p>条件：周末无实质利空 + 非农宽松预期发酵。上证压力位看至 <span class="anchor">3968 点</span>（3月平台颈线）。<br><b>操作：不追券商/权重，观察黄白线分化，重点盯科创50是否放量（>900亿）确认成长主线。</b></p>
-</div>
-<div class="scen sB">
-  <div class="st"><b>🟡 情景B · 中性震荡（基准概率）</b><span class="cond">A50 -0.2% ~ +0.4%</span></div>
-  <p>支撑位看 <span class="anchor">3902 点</span>（周五跳空缺口+前收平台）。<br><b>操作：高抛低吸，逆势低吸机构方向——黄金股、电网设备、光通信回踩；存储链与已透支的CRO不接飞刀。</b></p>
-</div>
-<div class="scen sC">
-  <div class="st"><b>🟢 情景C · 弱势防御</b><span class="cond">纳指期货下挫 &gt; 0.7%</span></div>
-  <p>触发条件：周末地缘反复（霍尔木兹谈判生变）或美债收益率反弹。<br><b>操作：防御启动，总仓位降至 5 成以下，只持有黄金股 + 高股息（电力/红利），其余题材仓全部让出。</b></p>
-</div>
-
-<div class="card" style="margin-top:8px">
-  <h3 style="font-size:12.5px;color:var(--blue)">🇺🇸 美股推演 · 下周核心变量</h3>
-  <p style="font-size:12px;color:var(--sub);margin-top:6px">下周三（8/12）美国7月CPI，市场预期同比 <span class="mono" style="color:var(--gold)">+3.2%</span>（前值3.4%，PCE仍粘性）。10年期美债周五收于 <span class="mono" style="color:var(--gold)">4.58%</span>（非农后-16bp）：<b style="color:var(--txt)">若CPI超预期、10Y收益率重新突破 4.75%（非农前高点），纳指需回踩 26200 点支撑</b>（8/6收盘平台），届时A股科技映射同步承压，情景C预案自动升级。</p>
-</div>
-
-<!-- ═══ 模块四 ═══ -->
-<h2><span class="no">04</span>机构金工池</h2>
-<div class="hdesc">来源：券商研报 / 国家政策文件，附估值历史分位</div>
-<div class="collapsible" id="instlist">
-
-  <div class="inst">
-    <div class="it"><div><div class="nm">特高压 · 柔性直流</div><div class="src">出处：国家发改委"十五五"电网规划 / 中信证券《电网设备2026下半年》</div></div><span class="badge tag-again">[再次强调]</span></div>
-    <div class="logic">核心逻辑：AI算力用电+新能源外送双瓶颈，柔直渗透率从15%→30%，订单进入集中交付年。</div>
-    <div class="valrow"><span class="valtxt">PB 近3年分位 21%</span><div class="pbar"><i style="width:21%;background:var(--a-down)"></i></div><span class="badge b-neg">[低估]</span></div>
-  </div>
-
-  <div class="inst">
-    <div class="it"><div><div class="nm">黄金 · 金矿股</div><div class="src">出处：中金公司《黄金牛市第二幕》/ 高盛大宗商品周报</div></div><span class="badge tag-again">[再次强调]</span></div>
-    <div class="logic">核心逻辑：央行购金+加息周期见顶+地缘对冲三重共振；纽蒙特预告2026产量-10%，供给收缩。</div>
-    <div class="valrow"><span class="valtxt">PE 近3年分位 62%</span><div class="pbar"><i style="width:62%;background:var(--gold)"></i></div><span class="badge b-warn">[合理]</span></div>
-  </div>
-
-  <div class="inst">
-    <div class="it"><div><div class="nm">半导体设备 · 材料（国产替代）</div><div class="src">出处：华泰证券《存储超级周期的外溢效应》</div></div><span class="badge tag-new">[首次提及]</span></div>
-    <div class="logic">核心逻辑：涨价周期向设备订单传导，国产晶圆厂扩产重启；但需隔离存储情绪风险，只选设备/材料不碰存储模组。</div>
-    <div class="valrow"><span class="valtxt">PE 近3年分位 58%</span><div class="pbar"><i style="width:58%;background:var(--gold)"></i></div><span class="badge b-warn">[合理]</span></div>
-  </div>
-
-  <div class="extra">
-    <div class="inst">
-      <div class="it"><div><div class="nm">创新药出海 · CRO</div><div class="src">出处：国办全链条创新药支持政策 / 中信证券医药</div></div><span class="badge tag-again">[再次强调]</span></div>
-      <div class="logic">核心逻辑：BD出海现金流兑现+行业投融资底部回暖；中期方向确认，但短期单日+4.86%已透支，等回踩再看。</div>
-      <div class="valrow"><span class="valtxt">PE 近3年分位 34%</span><div class="pbar"><i style="width:34%;background:var(--a-down)"></i></div><span class="badge b-neg">[低估]</span></div>
-    </div>
-
-    <div class="inst">
-      <div class="it"><div><div class="nm">人形机器人产业链</div><div class="src">出处：工信部量产应用试点（传闻）/ 国泰君安</div></div><span class="badge tag-new">[首次提及]</span></div>
-      <div class="logic">核心逻辑：2028批量生产目标临近，但订单未验证、纯主题定价，机构配置意愿低。</div>
-      <div class="valrow"><span class="valtxt">PE 近3年分位 88%</span><div class="pbar"><i style="width:88%;background:var(--a-up)"></i></div><span class="badge b-fire">[高估]</span></div>
-    </div>
-  </div>
-
-  <button class="morebtn" onclick="toggleMore(this,'instlist')">[ 展开全部 5 条 ▼ ]</button>
-</div>
-
-<!-- ═══ 模块五 ═══ -->
-<h2><span class="no">05</span>场外基金实操池（仅联接C）</h2>
-<div class="hdesc">与模块二逻辑强制闭环：利空/透支方向不给A级；传闻方向C级</div>
-
-<div class="fund">
-  <div class="ft"><div><div class="fn">① 黄金 ETF联接C</div><div class="code">例：华安黄金ETF联接C（000217）</div></div><span class="grade gA">A级 · 可分批建底仓</span></div>
-  <div class="reason">对应模块二🔥高确定性主线：非农转弱+金价破4400+美股金矿股验证。分2~3批建底仓，回踩5日线分批加。</div>
-  <div class="cap">⛔ 首次建仓上限：≤ 总权益 15%</div>
-</div>
-
-<div class="fund">
-  <div class="ft"><div><div class="fn">② 半导体芯片（设备/材料向）ETF联接C</div><div class="code">例：国泰中证半导体芯片ETF联接C（008282）</div></div><span class="grade gB">B级 · 等待回踩10日线</span></div>
-  <div class="reason">模块二存储利空未出清（闪迪/西数重挫），板块内部撕裂，不追高；待科创50缩量回踩10日线再介入，回避存储重仓基金。</div>
-  <div class="cap">⛔ 首次建仓上限：≤ 总权益 15%</div>
-</div>
-
-<div class="fund">
-  <div class="ft"><div><div class="fn">③ 创新药产业ETF联接C</div><div class="code">例：银华中证创新药产业ETF联接C（代码以销售平台为准）</div></div><span class="grade gB">B级 · 等待回踩10日线</span></div>
-  <div class="reason">周五+4.86%触发[已透支]剔除法令：不列入重点推荐、周一不追高开；回踩至涨停潮启动位附近再分批。</div>
-  <div class="cap">⛔ 首次建仓上限：≤ 总权益 15%</div>
-</div>
-
-<div class="extra">
-  <div class="fund">
-    <div class="ft"><div><div class="fn">④ 电网设备 / 电力指数联接C</div><div class="code">例：电网设备主题指数联接C（代码以销售平台为准）</div></div><span class="grade gB">B级 · 等待回踩10日线</span></div>
-    <div class="reason">PB分位21%低估+政策再强调，中线赔率好；但周五未放量启动，左侧分批不抢跑，情景B/C中兼防御属性。</div>
-    <div class="cap">⛔ 首次建仓上限：≤ 总权益 15%</div>
-  </div>
-
-  <div class="fund">
-    <div class="ft"><div><div class="fn">⑤ 人形机器人主题联接C</div><div class="code">例：机器人产业ETF联接C（代码以销售平台为准）</div></div><span class="grade gC">C级 · 暂避</span></div>
-    <div class="reason">模块二定性❄️仅传闻 + 模块四估值88%分位[高估] → 逻辑闭环：不给仓位，等量产订单实锤再重评。</div>
-    <div class="cap">⛔ 建仓上限：0%</div>
-  </div>
-</div>
-<button class="morebtn" onclick="toggleMore(this,'fundwrap')" id="fundbtn" style="margin-top:2px">[ 展开全部 5 只 ▼ ]</button>
-
-<div class="warnbox" style="margin-top:10px">
-  <b>⚠️ 强制持有期警示（C类份额）：</b>C类含销售服务费，若持有 <b>少于7天，赎回费高达1.5%</b>，短线进出必亏手续费。建议最短持有周期 <b>&gt; 1个月</b>，或事先设置止盈止损网格（如 +8%/-5%）再执行。任何单板块首次建仓不得超过总权益 <b>15%</b>。
-</div>
-
-<div class="datanote">
-  数据来源说明：指数、涨跌家数、资金流向、非农与金价等锚点取自 2026-08-07/08 公开报道复盘整理；<br>
-  部分基金代码为代表性示例，申购前请以基金销售系统实际显示为准。生成时间：2026-08-08 周六盘后。
-</div>
-
-</div><!-- /wrap -->
-
-<div class="footbar">⚠️ <b>风险提示：本文仅为策略推演，不构成投资建议，盈亏自负。</b></div>
-
-<script>
-// ── 服务器时间动态秒刷 ──
-function pad(n){return String(n).padStart(2,'0');}
-function tick(){
-  var d=new Date();
-  document.getElementById('clock').textContent=
-    d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+
-    pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
-}
-tick();setInterval(tick,1000);
-
-// ── 展开/收起 ──
-function toggleMore(btn,id){
-  var el=document.getElementById(id);
-  var open=el.classList.toggle('open');
-  btn.textContent=open?'[ 收起 ▲ ]':btn.textContent.replace('收起 ▲','展开全部').replace('▲','▼');
-  if(!open){btn.textContent=btn.dataset.txt||btn.textContent;}
-}
-// 记录初始文案，收起时还原
-document.querySelectorAll('.morebtn').forEach(function(b){b.dataset.txt=b.textContent;});
-</script>
+        // 小白跳过专业数据
+        function togglePro(btn) {
+            const proData = document.querySelector('.pro-data');
+            if (proData.classList.contains('hidden')) {
+                proData.classList.remove('hidden');
+                btn.textContent = '收起宏观';
+            } else {
+                proData.classList.add('hidden');
+                btn.textContent = '小白跳过宏观';
+            }
+        }
+    </script>
 </body>
 </html>
